@@ -27,6 +27,7 @@
     <mappers>
         <mapper resource="config/ibatis/organiz_structure_sqlmap.xml"/>
         <mapper resource="config/ibatis/doctors_nurses_sqlmap.xml"/>
+        <mapper resource="config/ibatis/hospital_sqlmap.xml"/>
         <!--<mapper resource="config/ibatis/flash_game_sqlmap.xml"/>-->
     </mappers>
 </configuration>

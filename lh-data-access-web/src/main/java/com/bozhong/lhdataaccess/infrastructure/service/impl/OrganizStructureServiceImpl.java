@@ -75,7 +75,7 @@ public class OrganizStructureServiceImpl implements OrganizStructureService {
                     organizStructureDO.setDepartName(job.get("deptName").toString());
                     organizStructureDO.setWardCode(job.get("wardCode").toString());
                     organizStructureDO.setWardName(job.get("wardName").toString());
-                    organizStructureDO.setValidFlag(Integer.parseInt(job.get("cancelFlag").toString()));
+                    organizStructureDO.setValidFlag(job.get("cancelFlag").toString());
                     organizStructureDO.setCreateId(0L);
                     organizStructureDO.setCreateTime(currentTime);
                     organizStructureDO.setUpdateId(0L);

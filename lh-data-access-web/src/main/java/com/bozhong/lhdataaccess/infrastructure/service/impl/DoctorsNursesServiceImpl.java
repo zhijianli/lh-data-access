@@ -87,7 +87,7 @@ public class DoctorsNursesServiceImpl implements DoctorsNursesService {
                     doctorsNursesDO.setWorkNumber(job.get("gh").toString());
                     doctorsNursesDO.setDateOfBirth(sdf.parse(job.get("dateOfBirth").toString()));
                     doctorsNursesDO.setIsOffice(job.get("inOffice").toString());
-                    doctorsNursesDO.setValidFlag(Integer.parseInt(job.get("cancelFlag").toString()));
+                    doctorsNursesDO.setValidFlag(job.get("cancelFlag").toString());
                     doctorsNursesDO.setCreateId(0L);
                     doctorsNursesDO.setCreateTime(currentTime);
                     doctorsNursesDO.setUpdateId(0L);
@@ -95,7 +95,7 @@ public class DoctorsNursesServiceImpl implements DoctorsNursesService {
                     doctorsNursesDAO.updateOrInsertDoctorsNurses(doctorsNursesDO);
                 }
             }catch(Exception e){
-                logger.error("组织机构数据dump的时候报错"+e);
+                logger.error("医护数据dump的时候报错"+e);
             }
             pageIndex = pageIndex+1;
         }

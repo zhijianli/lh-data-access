@@ -8,7 +8,7 @@
         <result column="depart_name" jdbcType="VARCHAR" property="departName" />
         <result column="ward_code" jdbcType="VARCHAR" property="wardCode" />
         <result column="ward_name" jdbcType="VARCHAR" property="wardName" />
-        <result column="valid_flag" jdbcType="INTEGER" property="validFlag" />
+        <result column="valid_flag" jdbcType="VARCHAR" property="validFlag" />
         <result column="create_id" jdbcType="BIGINT" property="createId" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
         <result column="update_id" jdbcType="BIGINT" property="updateId" />
@@ -27,12 +27,15 @@
         <!--where id = #{id,jdbcType=BIGINT}-->
     <!--</select>-->
 
-    <!--<select id="selectDataBylastUpdateTime" parameterType="com.bozhong.lhdataaccess.domain.OrganizStructureDO" resultMap="BaseResultMap">-->
-        <!--select-->
-        <!--<include refid="Base_Column_List" />-->
-        <!--from lh_data_access_organiz_structure-->
-        <!--where id = #{id,jdbcType=BIGINT}-->
-    <!--</select>-->
+    <select id="selectDataBylastUpdateTime" parameterType="com.bozhong.lhdataaccess.domain.OrganizStructureDO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from lh_data_access_organiz_structure
+        where
+        <![CDATA[
+            update_time >= #{updateTime,jdbcType=TIMESTAMP}
+        ]]>
+    </select>
 
     <insert id="updateOrInsertOrganizStructure" useGeneratedKeys="true" keyProperty="id" parameterType="com.bozhong.lhdataaccess.domain.OrganizStructureDO" >
 
@@ -49,7 +52,7 @@
         update lh_data_access_organiz_structure
         set depart_name=#{departName,jdbcType=VARCHAR},
             ward_name=#{wardName,jdbcType=VARCHAR},
-            valid_flag=#{validFlag,jdbcType=INTEGER},
+            valid_flag=#{validFlag,jdbcType=VARCHAR},
             update_time=#{updateTime,jdbcType=TIMESTAMP}
         where organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR} and
         depart_code = #{departCode,jdbcType=VARCHAR} and
@@ -74,7 +77,7 @@
         #{departName,jdbcType=VARCHAR},
         #{wardCode,jdbcType=VARCHAR},
         #{wardName,jdbcType=VARCHAR},
-        #{validFlag,jdbcType=INTEGER},
+        #{validFlag,jdbcType=VARCHAR},
         #{createId,jdbcType=BIGINT},
         #{createTime,jdbcType=TIMESTAMP},
         #{updateId,jdbcType=BIGINT},

@@ -35,7 +35,7 @@ public class DoctorsNursesDO {
 
     private String isOffice;
 
-    private Integer validFlag;
+    private String validFlag;
 
     private Long createId;
 
@@ -156,11 +156,11 @@ public class DoctorsNursesDO {
         this.isOffice = isOffice;
     }
 
-    public Integer getValidFlag() {
+    public String getValidFlag() {
         return validFlag;
     }
 
-    public void setValidFlag(Integer validFlag) {
+    public void setValidFlag(String validFlag) {
         this.validFlag = validFlag;
     }
 

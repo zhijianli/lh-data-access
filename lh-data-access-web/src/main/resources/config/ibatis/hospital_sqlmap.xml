@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bozhong.lhdataaccess.infrastructure.dao.HospitalDAO">
+  <resultMap id="BaseResultMap" type="com.bozhong.lhdataaccess.domain.HospitalDO">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="SITE" jdbcType="VARCHAR" property="site" />
+    <result column="INTRO" jdbcType="VARCHAR" property="intro" />
+    <result column="SORT_ORDER" jdbcType="INTEGER" property="sortOrder" />
+    <result column="NURSE_ASSESS_FLAG" jdbcType="INTEGER" property="nurseAssessFlag" />
+    <result column="GEO_LAT" jdbcType="DOUBLE" property="geoLat" />
+    <result column="GEO_LNG" jdbcType="DOUBLE" property="geoLng" />
+    <result column="VALID_FLAG" jdbcType="VARCHAR" property="validFlag" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="CITY" jdbcType="VARCHAR" property="city" />
+    <result column="COUNTY" jdbcType="VARCHAR" property="county" />
+    <result column="LEVEL" jdbcType="VARCHAR" property="level" />
+    <result column="IMAGE_ID" jdbcType="VARCHAR" property="imageId" />
+    <result column="TIME_ONLINE" jdbcType="VARCHAR" property="timeOnline" />
+    <result column="DEPARTMENTS_NUM" jdbcType="INTEGER" property="departmentsNum" />
+    <result column="OPEN_FLAG" jdbcType="INTEGER" property="openFlag" />
+    <result column="OPEN_CLOSE_UPDATE_TIME" jdbcType="TIMESTAMP" property="openCloseUpdateTime" />
+    <result column="BED_NUM" jdbcType="INTEGER" property="bedNum" />
+    <result column="HOSPITAL_TYPE" jdbcType="TINYINT" property="hospitalType" />
+    <result column="NURSE_DIR" jdbcType="VARCHAR" property="nurseDir" />
+    <result column="NURSE_DIR_PHONE" jdbcType="VARCHAR" property="nurseDirPhone" />
+    <result column="CREATE_BY" jdbcType="BIGINT" property="createBy" />
+    <result column="UPDATE_BY" jdbcType="BIGINT" property="updateBy" />
+    <result column="INNER" jdbcType="BIT" property="inner" />
+    <result column="LOGO_ID" jdbcType="VARCHAR" property="logoId" />
+    <result column="REVIEW_ROLES" jdbcType="VARCHAR" property="reviewRoles" />
+    <result column="FUND_ID" jdbcType="BIGINT" property="fundId" />
+    <result column="group_key" jdbcType="VARCHAR" property="groupKey" />
+    <result column="group_secret" jdbcType="VARCHAR" property="groupSecret" />
+    <result column="accurate_push" jdbcType="BIGINT" property="accuratePush" />
+    <result column="accurate_push_course" jdbcType="BIGINT" property="accuratePushCourse" />
+    <result column="last_hospital_follow_time" jdbcType="TIMESTAMP" property="lastHospitalFollowTime" />
+    <result column="customer_service_id" jdbcType="VARCHAR" property="customerServiceId" />
+    <result column="customer_service_name" jdbcType="VARCHAR" property="customerServiceName" />
+    <result column="customer_service_manager_id" jdbcType="VARCHAR" property="customerServiceManagerId" />
+    <result column="customer_service_manager_name" jdbcType="VARCHAR" property="customerServiceManagerName" />
+    <result column="is_biz_template_hospital" jdbcType="TINYINT" property="isBizTemplateHospital" />
+    <result column="pennant_flag" jdbcType="BIT" property="pennantFlag" />
+    <result column="wechat_course_column" jdbcType="VARCHAR" property="wechatCourseColumn" />
+    <result column="site_title" jdbcType="VARCHAR" property="siteTitle" />
+    <result column="site_domain" jdbcType="VARCHAR" property="siteDomain" />
+    <result column="sms_sign" jdbcType="VARCHAR" property="smsSign" />
+    <result column="site_icon" jdbcType="VARCHAR" property="siteIcon" />
+    <result column="site_background" jdbcType="VARCHAR" property="siteBackground" />
+    <result column="app_homepage" jdbcType="VARCHAR" property="appHomepage" />
+    <result column="app_login_background" jdbcType="VARCHAR" property="appLoginBackground" />
+    <result column="help_flag" jdbcType="BIT" property="helpFlag" />
+    <result column="app_download_url" jdbcType="VARCHAR" property="appDownloadUrl" />
+    <result column="is_custom" jdbcType="BIT" property="isCustom" />
+    <result column="functions" jdbcType="VARCHAR" property="functions" />
+    <result column="butt_flag" jdbcType="VARCHAR" property="buttFlag" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID, NAME, ADDRESS, PHONE, SITE, INTRO, SORT_ORDER, NURSE_ASSESS_FLAG, GEO_LAT, GEO_LNG, 
+    VALID_FLAG, CREATE_TIME, UPDATE_TIME, CODE, PROVINCE, CITY, COUNTY, LEVEL, IMAGE_ID, 
+    TIME_ONLINE, DEPARTMENTS_NUM, OPEN_FLAG, OPEN_CLOSE_UPDATE_TIME, BED_NUM, HOSPITAL_TYPE, 
+    NURSE_DIR, NURSE_DIR_PHONE, CREATE_BY, UPDATE_BY, INNER, LOGO_ID, REVIEW_ROLES, FUND_ID, 
+    group_key, group_secret, accurate_push, accurate_push_course, last_hospital_follow_time, 
+    customer_service_id, customer_service_name, customer_service_manager_id, customer_service_manager_name, 
+    is_biz_template_hospital, pennant_flag, wechat_course_column, site_title, site_domain, 
+    sms_sign, site_icon, site_background, app_homepage, app_login_background, help_flag, 
+    app_download_url, is_custom, functions, butt_flag
+  </sql>
+
+
+  <insert id="updateOrInsertHospital" useGeneratedKeys="true" keyProperty="id" parameterType="com.bozhong.lhdataaccess.domain.HospitalDO" >
+
+    <!-- 查看是否存在memberid,如果存在及更新，否则插入 -->
+    <selectKey keyProperty="count" order="BEFORE" resultType="int">
+      select count(*) as count from hospital
+      where code = #{code,jdbcType=VARCHAR}
+    </selectKey>
+
+    <!-- 如果大于0则更新 -->
+    <if test="count>0">
+      update hospital
+      set
+      valid_flag=#{validFlag,jdbcType=VARCHAR},
+      update_time=#{updateTime,jdbcType=TIMESTAMP}
+      where code = #{code,jdbcType=VARCHAR}
+    </if>
+
+    <!-- 如果等于0则保存 -->
+    <if test="count==0">
+      insert into hospital(
+      name,
+      code,
+      open_flag,
+      `INNER`,
+      valid_flag,
+      create_by,
+      create_time,
+      update_by,
+      update_time)
+      values(
+      #{name,jdbcType=VARCHAR},
+      #{code,jdbcType=VARCHAR},
+      #{openFlag,jdbcType=INTEGER},
+      #{inner,jdbcType=BIT},
+      #{validFlag,jdbcType=VARCHAR},
+      #{createBy,jdbcType=BIGINT},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{updateBy,jdbcType=BIGINT},
+      #{updateTime,jdbcType=TIMESTAMP})
+    </if>
+
+  </insert>
+
+  <!--<insert id="insert" parameterType="com.itheima.mybatis.po.Hospital">-->
+    <!--insert into hospital (ID, NAME, ADDRESS, -->
+      <!--PHONE, SITE, INTRO, -->
+      <!--SORT_ORDER, NURSE_ASSESS_FLAG, GEO_LAT, -->
+      <!--GEO_LNG, VALID_FLAG, CREATE_TIME, -->
+      <!--UPDATE_TIME, CODE, PROVINCE, -->
+      <!--CITY, COUNTY, LEVEL, -->
+      <!--IMAGE_ID, TIME_ONLINE, DEPARTMENTS_NUM, -->
+      <!--OPEN_FLAG, OPEN_CLOSE_UPDATE_TIME, BED_NUM, -->
+      <!--HOSPITAL_TYPE, NURSE_DIR, NURSE_DIR_PHONE, -->
+      <!--CREATE_BY, UPDATE_BY, INNER, -->
+      <!--LOGO_ID, REVIEW_ROLES, FUND_ID, -->
+      <!--group_key, group_secret, accurate_push, -->
+      <!--accurate_push_course, last_hospital_follow_time, -->
+      <!--customer_service_id, customer_service_name, -->
+      <!--customer_service_manager_id, customer_service_manager_name, -->
+      <!--is_biz_template_hospital, pennant_flag, wechat_course_column, -->
+      <!--site_title, site_domain, sms_sign, -->
+      <!--site_icon, site_background, app_homepage, -->
+      <!--app_login_background, help_flag, app_download_url, -->
+      <!--is_custom, functions, butt_flag-->
+      <!--)-->
+    <!--values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, -->
+      <!--#{phone,jdbcType=VARCHAR}, #{site,jdbcType=VARCHAR}, #{intro,jdbcType=VARCHAR}, -->
+      <!--#{sortOrder,jdbcType=INTEGER}, #{nurseAssessFlag,jdbcType=INTEGER}, #{geoLat,jdbcType=DOUBLE}, -->
+      <!--#{geoLng,jdbcType=DOUBLE}, #{validFlag,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, -->
+      <!--#{updateTime,jdbcType=TIMESTAMP}, #{code,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, -->
+      <!--#{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, -->
+      <!--#{imageId,jdbcType=VARCHAR}, #{timeOnline,jdbcType=VARCHAR}, #{departmentsNum,jdbcType=INTEGER}, -->
+      <!--#{openFlag,jdbcType=INTEGER}, #{openCloseUpdateTime,jdbcType=TIMESTAMP}, #{bedNum,jdbcType=INTEGER}, -->
+      <!--#{hospitalType,jdbcType=TINYINT}, #{nurseDir,jdbcType=VARCHAR}, #{nurseDirPhone,jdbcType=VARCHAR}, -->
+      <!--#{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT}, #{inner,jdbcType=BIT}, -->
+      <!--#{logoId,jdbcType=VARCHAR}, #{reviewRoles,jdbcType=VARCHAR}, #{fundId,jdbcType=BIGINT}, -->
+      <!--#{groupKey,jdbcType=VARCHAR}, #{groupSecret,jdbcType=VARCHAR}, #{accuratePush,jdbcType=BIGINT}, -->
+      <!--#{accuratePushCourse,jdbcType=BIGINT}, #{lastHospitalFollowTime,jdbcType=TIMESTAMP}, -->
+      <!--#{customerServiceId,jdbcType=VARCHAR}, #{customerServiceName,jdbcType=VARCHAR}, -->
+      <!--#{customerServiceManagerId,jdbcType=VARCHAR}, #{customerServiceManagerName,jdbcType=VARCHAR}, -->
+      <!--#{isBizTemplateHospital,jdbcType=TINYINT}, #{pennantFlag,jdbcType=BIT}, #{wechatCourseColumn,jdbcType=VARCHAR}, -->
+      <!--#{siteTitle,jdbcType=VARCHAR}, #{siteDomain,jdbcType=VARCHAR}, #{smsSign,jdbcType=VARCHAR}, -->
+      <!--#{siteIcon,jdbcType=VARCHAR}, #{siteBackground,jdbcType=VARCHAR}, #{appHomepage,jdbcType=VARCHAR}, -->
+      <!--#{appLoginBackground,jdbcType=VARCHAR}, #{helpFlag,jdbcType=BIT}, #{appDownloadUrl,jdbcType=VARCHAR}, -->
+      <!--#{isCustom,jdbcType=BIT}, #{functions,jdbcType=VARCHAR}, #{buttFlag,jdbcType=VARCHAR}-->
+      <!--)-->
+  <!--</insert>-->
+
+</mapper>

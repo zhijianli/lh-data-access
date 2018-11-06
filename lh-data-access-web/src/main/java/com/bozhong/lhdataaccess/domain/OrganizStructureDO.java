@@ -21,7 +21,7 @@ public class OrganizStructureDO {
 
     private String wardName;
 
-    private Integer validFlag;
+    private String validFlag;
 
     private Long createId;
 
@@ -85,11 +85,11 @@ public class OrganizStructureDO {
         this.wardName = wardName;
     }
 
-    public Integer getValidFlag() {
+    public String getValidFlag() {
         return validFlag;
     }
 
-    public void setValidFlag(Integer validFlag) {
+    public void setValidFlag(String validFlag) {
         this.validFlag = validFlag;
     }
 

@@ -28,7 +28,6 @@ public class DumpDataPubisher implements ApplicationContextAware {
         this.applicationContext=applicationContext;
     }
     public void publishEvent(DumpDataEvent event){
-        System.out.println("into My Publisher's method");
 
         Boolean operationSuccess = false;
 
@@ -36,9 +35,10 @@ public class DumpDataPubisher implements ApplicationContextAware {
 //        organizStructureService.dumpOrganizStructureData(event.getLastUpdateTime());
 
         //dump医护的数据
-        doctorsNursesService.dumpDoctorsNursesData(event.getLastUpdateTime());
+//        doctorsNursesService.dumpDoctorsNursesData(event.getLastUpdateTime());
 
         //dump数据成功，发布事件（必须要前面的操作都执行成功了才能进行这步操作）
+        operationSuccess = true;
         if(operationSuccess){
             applicationContext.publishEvent(event);
         }

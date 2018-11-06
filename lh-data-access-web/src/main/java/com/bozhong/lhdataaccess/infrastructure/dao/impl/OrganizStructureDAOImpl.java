@@ -21,8 +21,7 @@ public class OrganizStructureDAOImpl extends BaseDao implements OrganizStructure
 
     @Override
     public List<OrganizStructureDO> selectDataBylastUpdateTime(OrganizStructureDO organizStructureDO) {
-        insert("selectDataBylastUpdateTime",organizStructureDO);
-        return null;
+        return findForList("selectDataBylastUpdateTime",organizStructureDO);
     }
 
 }
