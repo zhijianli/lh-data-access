@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bozhong.lhdataaccess.infrastructure.dao.DoctorsNursesDAO">
+  <resultMap id="BaseResultMap" type="com.bozhong.lhdataaccess.domain.DoctorsNursesDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="mobile_phone" jdbcType="VARCHAR" property="mobilePhone" />
+    <result column="organiz_structure_code" jdbcType="VARCHAR" property="organizStructureCode" />
+    <result column="depart_ward_code" jdbcType="VARCHAR" property="departWardCode" />
+    <result column="depart_ward_name" jdbcType="VARCHAR" property="departWardName" />
+    <result column="emp_code" jdbcType="BIGINT" property="empCode" />
+    <result column="job_title_code" jdbcType="VARCHAR" property="jobTitleCode" />
+    <result column="current_professional_code" jdbcType="VARCHAR" property="currentProfessionalCode" />
+    <result column="work_number" jdbcType="VARCHAR" property="workNumber" />
+    <result column="date_of_birth" jdbcType="TIMESTAMP" property="dateOfBirth" />
+    <result column="is_office" jdbcType="VARCHAR" property="isOffice" />
+    <result column="valid_flag" jdbcType="INTEGER" property="validFlag" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_id" jdbcType="BIGINT" property="updateId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, name, sex, telephone, organiz_structure_code, depart_ward_code, depart_ward_name,
+    emp_code, job_title_code, current_professional_code, work_number, date_of_birth,
+    is_office, valid_flag, create_id, create_time, update_id, update_time
+  </sql>
+
+  <insert id="updateOrInsertDoctorsNurses" useGeneratedKeys="true" keyProperty="id" parameterType="com.bozhong.lhdataaccess.domain.DoctorsNursesDO" >
+
+    <!-- 查看是否存在memberid,如果存在及更新，否则插入 -->
+    <selectKey keyProperty="count" order="BEFORE" resultType="int">
+      select count(*) as count from lh_data_access_doctors_nurses
+      where organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR} and
+      emp_code = #{empCode,jdbcType=VARCHAR}
+    </selectKey>
+
+    <!-- 如果大于0则更新 -->
+    <if test="count>0">
+      update lh_data_access_doctors_nurses
+      set
+      name=#{name,jdbcType=VARCHAR},
+      sex=#{sex,jdbcType=VARCHAR},
+      mobile_phone=#{mobilePhone,jdbcType=VARCHAR},
+      depart_ward_code=#{departWardCode,jdbcType=VARCHAR},
+      depart_ward_name=#{departWardName,jdbcType=VARCHAR},
+      job_title_code=#{jobTitleCode,jdbcType=VARCHAR},
+      current_professional_code=#{currentProfessionalCode,jdbcType=VARCHAR},
+      work_number=#{workNumber,jdbcType=VARCHAR},
+      date_of_birth=#{dateOfBirth,jdbcType=TIMESTAMP},
+      is_office=#{isOffice,jdbcType=VARCHAR},
+      valid_flag=#{validFlag,jdbcType=INTEGER},
+      update_time=#{updateTime,jdbcType=TIMESTAMP}
+      where organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR} and
+      emp_code = #{empCode,jdbcType=VARCHAR}
+    </if>
+
+    <!-- 如果等于0则保存 -->
+    <if test="count==0">
+      insert into lh_data_access_doctors_nurses(
+      name,
+      sex,
+      mobile_phone,
+      organiz_structure_code,
+      depart_ward_code,
+      depart_ward_name,
+      emp_code,
+      job_title_code,
+      current_professional_code,
+      work_number,
+      date_of_birth,
+      is_office,
+      valid_flag,
+      create_id,
+      create_time,
+      update_id,
+      update_time)
+      values(
+      #{name,jdbcType=VARCHAR},
+      #{sex,jdbcType=VARCHAR},
+      #{mobilePhone,jdbcType=VARCHAR},
+      #{organizStructureCode,jdbcType=VARCHAR},
+      #{departWardCode,jdbcType=VARCHAR},
+      #{departWardName,jdbcType=VARCHAR},
+      #{empCode,jdbcType=VARCHAR},
+      #{jobTitleCode,jdbcType=VARCHAR},
+      #{currentProfessionalCode,jdbcType=VARCHAR},
+      #{workNumber,jdbcType=VARCHAR},
+      #{dateOfBirth,jdbcType=TIMESTAMP},
+      #{isOffice,jdbcType=VARCHAR},
+      #{validFlag,jdbcType=INTEGER},
+      #{createId,jdbcType=BIGINT},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{updateId,jdbcType=BIGINT},
+      #{updateTime,jdbcType=TIMESTAMP})
+    </if>
+
+  </insert>
+
+  <!--<insert id="insertSelective" parameterType="com.itheima.mybatis.po.LhDataAccessDoctorsNurses">-->
+    <!--insert into lh_data_access_doctors_nurses-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
+      <!--<if test="id != null">-->
+        <!--id,-->
+      <!--</if>-->
+      <!--<if test="name != null">-->
+        <!--name,-->
+      <!--</if>-->
+      <!--<if test="sex != null">-->
+        <!--sex,-->
+      <!--</if>-->
+      <!--<if test="telephone != null">-->
+        <!--telephone,-->
+      <!--</if>-->
+      <!--<if test="organizStructureCode != null">-->
+        <!--organiz_structure_code,-->
+      <!--</if>-->
+      <!--<if test="departCode != null">-->
+        <!--depart_code,-->
+      <!--</if>-->
+      <!--<if test="departName != null">-->
+        <!--depart_name,-->
+      <!--</if>-->
+      <!--<if test="wardCode != null">-->
+        <!--ward_code,-->
+      <!--</if>-->
+      <!--<if test="wardName != null">-->
+        <!--ward_name,-->
+      <!--</if>-->
+      <!--<if test="empCode != null">-->
+        <!--emp_code,-->
+      <!--</if>-->
+      <!--<if test="jobTitleCode != null">-->
+        <!--job_title_code,-->
+      <!--</if>-->
+      <!--<if test="currentProfessionalCode != null">-->
+        <!--current_professional_code,-->
+      <!--</if>-->
+      <!--<if test="workNumber != null">-->
+        <!--work_number,-->
+      <!--</if>-->
+      <!--<if test="dateOfBirth != null">-->
+        <!--date_of_birth,-->
+      <!--</if>-->
+      <!--<if test="isOffice != null">-->
+        <!--is_office,-->
+      <!--</if>-->
+      <!--<if test="validFlag != null">-->
+        <!--valid_flag,-->
+      <!--</if>-->
+      <!--<if test="createId != null">-->
+        <!--create_id,-->
+      <!--</if>-->
+      <!--<if test="createTime != null">-->
+        <!--create_time,-->
+      <!--</if>-->
+      <!--<if test="updateId != null">-->
+        <!--update_id,-->
+      <!--</if>-->
+      <!--<if test="updateTime != null">-->
+        <!--update_time,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
+      <!--<if test="id != null">-->
+        <!--#{id,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="name != null">-->
+        <!--#{name,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="sex != null">-->
+        <!--#{sex,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="telephone != null">-->
+        <!--#{telephone,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="organizStructureCode != null">-->
+        <!--#{organizStructureCode,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="departCode != null">-->
+        <!--#{departCode,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="departName != null">-->
+        <!--#{departName,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="wardCode != null">-->
+        <!--#{wardCode,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="wardName != null">-->
+        <!--#{wardName,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="empCode != null">-->
+        <!--#{empCode,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="jobTitleCode != null">-->
+        <!--#{jobTitleCode,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="currentProfessionalCode != null">-->
+        <!--#{currentProfessionalCode,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="workNumber != null">-->
+        <!--#{workNumber,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="dateOfBirth != null">-->
+        <!--#{dateOfBirth,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="isOffice != null">-->
+        <!--#{isOffice,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="validFlag != null">-->
+        <!--#{validFlag,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="createId != null">-->
+        <!--#{createId,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="createTime != null">-->
+        <!--#{createTime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="updateId != null">-->
+        <!--#{updateId,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="updateTime != null">-->
+        <!--#{updateTime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
+
+</mapper>

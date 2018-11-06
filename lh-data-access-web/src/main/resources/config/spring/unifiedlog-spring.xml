@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"></bean>
+    <bean id="unifiedLogAdvisorPointCut" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+        <property name="patterns">
+            <list>
+                <!--<value>com.bozhong.nursetrain.application.process.*</value>-->
+                <value>com.bozhong.lhdataaccess.infrastructure.service.*</value>
+                <!--<value>com.bozhong.access.repo.dao.*</value>-->
+            </list>
+        </property>
+        <property name="advice">
+            <ref bean="unifiedLogAdvisor" />
+        </property>
+    </bean>
+
+    <bean id="unifiedLogAdvisor" class="com.bozhong.unifiedLog.advisor.UnifiedLogAdvisor">
+        <property name="localAppName" value="nursetrain-web" />
+        <property name="asPartPath" value="true" />
+        <property name="ingoreException">
+            <set>
+                <value>com.bozhong.nursetrain.exception.NurseTrainException</value>
+            </set>
+        </property>
+    </bean>
+</beans>

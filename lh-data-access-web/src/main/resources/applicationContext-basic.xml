@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:task="http://www.springframework.org/schema/task"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/task
+    http://www.springframework.org/schema/task/spring-task.xsd">
+
+
+    <context:annotation-config/>
+
+    <!--初始化配置中心-->
+    <bean id="configSetPropertyHolder" class="com.bozhong.config.core.ConfigLoader" init-method="init">
+        <!-- 应用id -->
+        <property name="appId" value="71"/>
+        <!-- 静态常量类 -->
+        <property name="clazz">
+            <value type="java.lang.Class">com.bozhong.lhdataaccess.config.ConfigParam</value>
+        </property>
+    </bean>
+
+    <!-- extend -->
+    <bean id="springApplicationContextHolder" class="com.yx.eweb.handler.SpringApplicationContextHolder"
+          lazy-init="false" scope="singleton" />
+
+
+
+    <import resource="config/spring/redis-config-spring.xml" />
+    <import resource="config/spring/unifiedlog-spring.xml" />
+    <import resource="config/spring/datasource-config-spring.xml" />
+    <import resource="config/spring/dubbo-service-spring.xml" />
+
+    <bean id="securityPipeLine" class="com.bozhong.lhdataaccess.security.SecurityPipeLine">
+        <property name="myRedis" ref="myRedis"/>
+    </bean>
+
+
+    <context:component-scan base-package="com.bozhong.lhdataaccess.infrastructure.*"/>
+    <context:component-scan base-package="com.bozhong.lhdataaccess.application.process.*"/>
+    <context:component-scan base-package="com.bozhong.lhdataaccess.restful.resources*"/>
+    <context:component-scan base-package="com.bozhong.lhdataaccess.observation*"/>
+    <context:component-scan base-package="com.bozhong.lhdataaccess.worker"/>
+    <context:component-scan base-package="com.bozhong.lhdataaccess.task"/>
+
+    <task:annotation-driven />
+</beans>

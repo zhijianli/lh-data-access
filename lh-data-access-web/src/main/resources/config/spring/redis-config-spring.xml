@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+       default-autowire="byName">
+
+
+    <bean id="myRedisConfigUtil" class="com.bozhong.myredis.common.MyRedisConfigUtil">
+        <property name="myRedisConfig" ref="myRedisConfig"/>
+    </bean>
+
+    <bean id="myRedisConfig" class="com.bozhong.myredis.common.MyRedisConfig">
+        <property name="redisPassword">
+            <map>
+                <entry key="353" value="${redis_password}"></entry>
+                <entry key="354" value="${redis_password}"></entry>
+            </map>
+        </property>
+        <property name="redisStrMap">
+            <map>
+                <entry key="353" value="${redis_ip}"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="myRedis" class="com.bozhong.myredis.MyRedisSingleForHessian">
+        <constructor-arg value="353"/>
+        <constructor-arg value="myredis"/>
+    </bean>
+
+
+    <!--<bean id="myRedisClusterForHessian" class="com.bozhong.myredis.MyRedisClusterForHessian">-->
+        <!--<constructor-arg value="353"/>-->
+        <!--<constructor-arg value="myredis"/>-->
+    <!--</bean>-->
+
+
+    <bean id="apiSecurityRedisUtil" class="com.api.common.util.ApiSecurityRedisUtil">
+        <property name="myRedis" ref="myRedis"></property>
+    </bean>
+
+    <bean id="redisTemplate" class="com.bozhong.lhdataaccess.common.util.RedisTemplate">
+        <property name="myRedis" ref="myRedis"></property>
+    </bean>
+
+
+
+</beans>

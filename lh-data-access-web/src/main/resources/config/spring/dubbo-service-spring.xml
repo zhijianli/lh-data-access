@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo" xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       		http://code.alibabatech.com/schema/dubbo
+       		http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+       default-autowire="byName">
+
+    <dubbo:application name="lh-data-access" owner="programmer" organization="dubbox"/>
+
+    <!--需要配合配置中心-->
+    <dubbo:registry address="${dubbo-zookeeper-host}"/>
+    <dubbo:registry address="${dubbo-zookeeper-host}"/>
+    <dubbo:protocol name="dubbo" port="${dubbo_port}"/>
+    <dubbo:consumer check="false"/>
+
+    <bean id="roleReadServiceClient" class="com.bozhong.privilege.service.RoleReadServiceClient">
+        <property name="roleReadService" ref="roleReadService"/>
+    </bean>
+
+    <dubbo:reference id="roleReadService" interface="com.bozhong.privilege.service.RoleReadService"
+                     version="${hsf_privilege_consumer_version}" group="role" timeout="3000"/>
+
+    <bean id="roleWriteServiceClient" class="com.bozhong.privilege.service.RoleWriteServiceClient">
+        <property name="roleWriteService" ref="roleWriteService"/>
+    </bean>
+    <dubbo:reference id="roleWriteService" interface="com.bozhong.privilege.service.RoleWriteService"
+                     version="${hsf_privilege_consumer_version}" group="role" timeout="15000">
+    </dubbo:reference>
+
+    <bean id="privilegeReadServiceClient" class="com.bozhong.privilege.service.PrivilegeReadServiceClient">
+        <property name="privilegeReadService" ref="privilegeReadService"/>
+    </bean>
+    <dubbo:reference id="privilegeReadService" interface="com.bozhong.privilege.service.PrivilegeReadService"
+                     version="${hsf_privilege_consumer_version}" group="privilege" timeout="15000">
+    </dubbo:reference>
+
+
+</beans>

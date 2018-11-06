@@ -1,0 +1,78 @@
+<!--<?xml version="1.0" encoding="UTF-8" ?>-->
+<!--<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >-->
+<!--<mapper namespace="FlashGame">-->
+	<!--<resultMap id="flashGameList" type="FlashGameDO">-->
+		<!--<id property="id" column="id" />-->
+		<!--<result property="title" column="title" jdbcType="VARCHAR" />-->
+		<!--<result property="coverUrl" column="cover_url" jdbcType="VARCHAR" />-->
+		<!--<result property="flashUrl" column="flash_url" jdbcType="VARCHAR" />-->
+		<!--<result property="uptime" column="uptime" jdbcType="TIMESTAMP" />-->
+		<!--<result property="releaseFlag" column="release_flag" jdbcType="NUMERIC" />-->
+		<!--<result property="topFlag" column="top_flag" jdbcType="NUMERIC" />-->
+		<!--<result property="createId" column="create_id" jdbcType="VARCHAR" />-->
+		<!--<result property="updateId" column="update_id" jdbcType="VARCHAR" />-->
+		<!--<result property="validFlag" column="valid_flag" jdbcType="NUMERIC" />-->
+		<!--<result property="createTime" column="create_time" jdbcType="TIMESTAMP" />-->
+		<!--<result property="updateTime" column="update_time" jdbcType="TIMESTAMP" />-->
+	<!--</resultMap>-->
+
+	<!--<insert id="addFlashGame" parameterType="FlashGameDO" useGeneratedKeys="true" keyProperty="id">-->
+		<!--insert into-->
+		<!--flash_game (title,cover_url,flash_url,uptime,release_flag,top_flag,create_id,update_id,valid_flag,create_time,update_time)-->
+		<!--values-->
+		<!--(-->
+		<!--#{title, jdbcType=VARCHAR},-->
+		<!--#{coverUrl, jdbcType=VARCHAR},-->
+		<!--#{flashUrl, jdbcType=VARCHAR},-->
+		<!--#{uptime, jdbcType=TIMESTAMP},-->
+		<!--#{releaseFlag, jdbcType=NUMERIC},-->
+		<!--#{topFlag, jdbcType=NUMERIC},-->
+		<!--#{createId, jdbcType=VARCHAR},-->
+		<!--#{updateId, jdbcType=VARCHAR},-->
+		<!--#{validFlag, jdbcType=NUMERIC},-->
+		<!--#{createTime, jdbcType=TIMESTAMP},-->
+		<!--#{updateTime, jdbcType=TIMESTAMP}-->
+		<!--)-->
+	<!--</insert>-->
+
+	<!--<update id="updateFlashGame" parameterType="FlashGameDO">-->
+		<!--update flash_game-->
+		<!--set title = #{title},-->
+			<!--cover_url = #{coverUrl},-->
+			<!--flash_url = #{flashUrl},-->
+			<!--update_time = #{updateTime},-->
+			<!--update_id = #{updateId}-->
+		<!--where id=#{id}-->
+	<!--</update>-->
+
+	<!--<update id="updateFlashGameStatus" parameterType="FlashGameDO">-->
+		<!--update flash_game-->
+		<!--<set>-->
+			<!--update_time = #{updateTime},-->
+			<!--<if test="releaseFlag != null">-->
+				<!--release_flag = #{releaseFlag},-->
+			<!--</if>-->
+			<!--<if test="topFlag != null">-->
+				<!--top_flag = #{topFlag},-->
+			<!--</if>-->
+			<!--<if test="validFlag != null">-->
+				<!--valid_flag = #{validFlag},-->
+			<!--</if>-->
+			<!--<if test="updateId != null and updateId != ''">-->
+				<!--update_id = #{updateId}-->
+			<!--</if>-->
+		<!--</set>-->
+		<!--<where>-->
+			<!--id = #{id}-->
+		<!--</where>-->
+	<!--</update>-->
+	<!--<select id="findFlashGameByPage" parameterType="Map" resultMap="flashGameList">-->
+		<!--select * from flash_game-->
+		<!--where valid_flag = 1-->
+		<!--<if test="type != null">-->
+			<!--and type = #{type}-->
+		<!--</if>-->
+		<!--ORDER BY RELEASE_FLAG DESC ,TOP_FLAG DESC ,UPDATE_TIME DESC-->
+	<!--</select>-->
+
+<!--</mapper>-->

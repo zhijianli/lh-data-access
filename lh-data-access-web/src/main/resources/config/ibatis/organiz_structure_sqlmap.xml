@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bozhong.lhdataaccess.infrastructure.dao.OrganizStructureDAO">
+    <resultMap id="BaseResultMap" type="com.bozhong.lhdataaccess.domain.OrganizStructureDO">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="organiz_structure_code" jdbcType="VARCHAR" property="organizStructureCode" />
+        <result column="depart_code" jdbcType="VARCHAR" property="departCode" />
+        <result column="depart_name" jdbcType="VARCHAR" property="departName" />
+        <result column="ward_code" jdbcType="VARCHAR" property="wardCode" />
+        <result column="ward_name" jdbcType="VARCHAR" property="wardName" />
+        <result column="valid_flag" jdbcType="INTEGER" property="validFlag" />
+        <result column="create_id" jdbcType="BIGINT" property="createId" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_id" jdbcType="BIGINT" property="updateId" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+       id, organiz_structure_code, depart_code, depart_name, ward_code, ward_name,
+       valid_flag, create_id, create_time, update_id, update_time
+    </sql>
+
+    <!--<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">-->
+        <!--select-->
+        <!--<include refid="Base_Column_List" />-->
+        <!--from lh_data_access_organiz_structure-->
+        <!--where id = #{id,jdbcType=BIGINT}-->
+    <!--</select>-->
+
+    <!--<select id="selectDataBylastUpdateTime" parameterType="com.bozhong.lhdataaccess.domain.OrganizStructureDO" resultMap="BaseResultMap">-->
+        <!--select-->
+        <!--<include refid="Base_Column_List" />-->
+        <!--from lh_data_access_organiz_structure-->
+        <!--where id = #{id,jdbcType=BIGINT}-->
+    <!--</select>-->
+
+    <insert id="updateOrInsertOrganizStructure" useGeneratedKeys="true" keyProperty="id" parameterType="com.bozhong.lhdataaccess.domain.OrganizStructureDO" >
+
+    <!-- 查看是否存在memberid,如果存在及更新，否则插入 -->
+    <selectKey keyProperty="count" order="BEFORE" resultType="int">
+        select count(*) as count from lh_data_access_organiz_structure
+        where organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR} and
+              depart_code = #{departCode,jdbcType=VARCHAR} and
+              ward_code = #{wardCode,jdbcType=VARCHAR}
+    </selectKey>
+
+    <!-- 如果大于0则更新 -->
+    <if test="count>0">
+        update lh_data_access_organiz_structure
+        set depart_name=#{departName,jdbcType=VARCHAR},
+            ward_name=#{wardName,jdbcType=VARCHAR},
+            valid_flag=#{validFlag,jdbcType=INTEGER},
+            update_time=#{updateTime,jdbcType=TIMESTAMP}
+        where organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR} and
+        depart_code = #{departCode,jdbcType=VARCHAR} and
+        ward_code = #{wardCode,jdbcType=VARCHAR}
+    </if>
+
+    <!-- 如果等于0则保存 -->
+    <if test="count==0">
+        insert into lh_data_access_organiz_structure(organiz_structure_code,
+        depart_code,
+        depart_name,
+        ward_code,
+        ward_name,
+        valid_flag,
+        create_id,
+        create_time,
+        update_id,
+        update_time)
+        values(
+        #{organizStructureCode,jdbcType=VARCHAR},
+        #{departCode,jdbcType=VARCHAR},
+        #{departName,jdbcType=VARCHAR},
+        #{wardCode,jdbcType=VARCHAR},
+        #{wardName,jdbcType=VARCHAR},
+        #{validFlag,jdbcType=INTEGER},
+        #{createId,jdbcType=BIGINT},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{updateId,jdbcType=BIGINT},
+        #{updateTime,jdbcType=TIMESTAMP})
+    </if>
+
+   </insert>
+
+
+    <!--<insert id="insertOrganizStructure" useGeneratedKeys="true"  keyProperty="id" parameterType="com.bozhong.lhdataaccess.domain.OrganizStructureDO">-->
+        <!--insert into lh_data_access_organiz_structure-->
+        <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
+            <!--&lt;!&ndash;<if test="id != null">&ndash;&gt;-->
+                <!--&lt;!&ndash;id,&ndash;&gt;-->
+            <!--&lt;!&ndash;</if>&ndash;&gt;-->
+            <!--<if test="organizStructureCode != null">-->
+                <!--organiz_structure_code,-->
+            <!--</if>-->
+            <!--<if test="departCode != null">-->
+                <!--depart_code,-->
+            <!--</if>-->
+            <!--<if test="departName != null">-->
+                <!--depart_name,-->
+            <!--</if>-->
+            <!--<if test="wardCode != null">-->
+                <!--ward_code,-->
+            <!--</if>-->
+            <!--<if test="wardName != null">-->
+                <!--ward_name,-->
+            <!--</if>-->
+            <!--<if test="validFlag != null">-->
+                <!--valid_flag,-->
+            <!--</if>-->
+            <!--<if test="createId != null">-->
+                <!--create_id,-->
+            <!--</if>-->
+            <!--<if test="createTime != null">-->
+                <!--create_time,-->
+            <!--</if>-->
+            <!--<if test="updateId != null">-->
+                <!--update_id,-->
+            <!--</if>-->
+            <!--<if test="updateTime != null">-->
+                <!--update_time,-->
+            <!--</if>-->
+        <!--</trim>-->
+        <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
+            <!--&lt;!&ndash;<if test="id != null">&ndash;&gt;-->
+                <!--&lt;!&ndash;#{id,jdbcType=BIGINT},&ndash;&gt;-->
+            <!--&lt;!&ndash;</if>&ndash;&gt;-->
+            <!--<if test="organizStructureCode != null">-->
+                <!--#{organizStructureCode,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="departCode != null">-->
+                <!--#{departCode,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="departName != null">-->
+                <!--#{departName,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="wardCode != null">-->
+                <!--#{wardCode,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="wardName != null">-->
+                <!--#{wardName,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="validFlag != null">-->
+                <!--#{validFlag,jdbcType=INTEGER},-->
+            <!--</if>-->
+            <!--<if test="createId != null">-->
+                <!--#{createId,jdbcType=BIGINT},-->
+            <!--</if>-->
+            <!--<if test="createTime != null">-->
+                <!--#{createTime,jdbcType=TIMESTAMP},-->
+            <!--</if>-->
+            <!--<if test="updateId != null">-->
+                <!--#{updateId,jdbcType=BIGINT},-->
+            <!--</if>-->
+            <!--<if test="updateTime != null">-->
+                <!--#{updateTime,jdbcType=TIMESTAMP},-->
+            <!--</if>-->
+        <!--</trim>-->
+    <!--</insert>-->
+
+
+    <!--<update id="updateByPrimaryKeySelective" parameterType="com.itheima.mybatis.po.LhDataAccessOrganizStructure">-->
+        <!--update lh_data_access_organiz_structure-->
+        <!--<set>-->
+            <!--<if test="organizStructureCode != null">-->
+                <!--organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="departCode != null">-->
+                <!--depart_code = #{departCode,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="departName != null">-->
+                <!--depart_name = #{departName,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="inpatientAreaCode != null">-->
+                <!--inpatient_area_code = #{inpatientAreaCode,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="inpatientAreaName != null">-->
+                <!--inpatient_area_name = #{inpatientAreaName,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="validFlag != null">-->
+                <!--valid_flag = #{validFlag,jdbcType=INTEGER},-->
+            <!--</if>-->
+            <!--<if test="createId != null">-->
+                <!--create_id = #{createId,jdbcType=BIGINT},-->
+            <!--</if>-->
+            <!--<if test="createTime != null">-->
+                <!--create_time = #{createTime,jdbcType=TIMESTAMP},-->
+            <!--</if>-->
+            <!--<if test="updateId != null">-->
+                <!--update_id = #{updateId,jdbcType=BIGINT},-->
+            <!--</if>-->
+            <!--<if test="updateTime != null">-->
+                <!--update_time = #{updateTime,jdbcType=TIMESTAMP},-->
+            <!--</if>-->
+        <!--</set>-->
+        <!--where id = #{id,jdbcType=BIGINT}-->
+    <!--</update>-->
+
+</mapper>

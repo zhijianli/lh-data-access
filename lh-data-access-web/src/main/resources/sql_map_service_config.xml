@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="cacheEnabled" value="false"/>
+        <setting name="localCacheScope" value="STATEMENT"/>
+        <!--<setting name="logImpl" value="STDOUT_LOGGING" />-->
+    </settings>
+
+    <typeAliases>
+        <typeAlias type="com.bozhong.lhdataaccess.domain.OrganizStructureDO" alias="organizStructureDO"/>
+        <typeAlias type="com.bozhong.lhdataaccess.domain.DoctorsNursesDO" alias="doctorsNursesDO"/>
+        <!--<typeAlias type="com.bozhong.lhdataaccessomain.dbdo.UserRoleMapDO" alias="UserRoleMapDO"/>-->
+        <!--<typeAlias type="com.bozhong.lhdataaccesslient.domain.query.UserRoleMapQuery" alias="userRoleMapQuery"/>-->
+        <!--<typeAlias type="com.bozhong.lhdataaccessomain.dbdo.VideoInfoDO" alias="VideoInfoDO"/>-->
+        <!--<typeAlias type="com.bozhong.lhdataaccessomain.dbdo.FlashGameDO" alias="FlashGameDO"/>-->
+    </typeAliases>
+
+    <plugins>
+        <plugin interceptor="com.zhicall.core.mybatis.plugin.SelectCountSqlInterceptor" />
+        <plugin interceptor="com.zhicall.core.mybatis.plugin.OffsetLimitInterceptor">
+            <property name="dialectClass" value="com.zhicall.core.mybatis.dialect.MySQLDialect" />
+        </plugin>
+    </plugins>
+
+    <mappers>
+        <mapper resource="config/ibatis/organiz_structure_sqlmap.xml"/>
+        <mapper resource="config/ibatis/doctors_nurses_sqlmap.xml"/>
+        <!--<mapper resource="config/ibatis/flash_game_sqlmap.xml"/>-->
+    </mappers>
+</configuration>
