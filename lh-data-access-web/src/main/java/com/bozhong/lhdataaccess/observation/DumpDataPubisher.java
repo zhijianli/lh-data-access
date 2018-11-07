@@ -35,6 +35,12 @@ public class DumpDataPubisher implements ApplicationContextAware {
     @Autowired
     private DoctorPrescriptionService doctorPrescriptionService;
 
+    @Autowired
+    private DoctorOutDiagnosisService doctorOutDiagnosisService;
+
+    @Autowired
+    private DoctorInDiagnosisService doctorInDiagnosisService;
+
     private ApplicationContext applicationContext;
 
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -65,10 +71,10 @@ public class DumpDataPubisher implements ApplicationContextAware {
         doctorPrescriptionService.dumpDoctorPrescription(lastUpdateTime);
 
         //dump门诊诊断的数据
-        
+        doctorOutDiagnosisService.dumpDoctorOutDiagnosis(lastUpdateTime);
 
         //dump住院诊断的数据
-
+        doctorInDiagnosisService.dumpDoctorInDiagnosis(lastUpdateTime);
 
 
 

@@ -34,6 +34,9 @@
         <mapper resource="config/ibatis/out_patient_sqlmap.xml"/>
         <mapper resource="config/ibatis/doctor_order_sqlmap.xml"/>
         <mapper resource="config/ibatis/doctor_prescription_sqlmap.xml"/>
+        <mapper resource="config/ibatis/doctor_out_diagnosis_sqlmap.xml"/>
+        <mapper resource="config/ibatis/doctor_in_diagnosis_sqlmap.xml"/>
+
 
         <!--<mapper resource="config/ibatis/flash_game_sqlmap.xml"/>-->
     </mappers>

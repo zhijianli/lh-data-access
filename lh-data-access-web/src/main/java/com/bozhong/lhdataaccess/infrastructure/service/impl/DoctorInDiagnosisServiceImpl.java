@@ -1,13 +1,13 @@
 package com.bozhong.lhdataaccess.infrastructure.service.impl;
 
 import com.bozhong.lhdataaccess.common.util.HttpUtil;
-import com.bozhong.lhdataaccess.domain.DoctorOrderDO;
-import com.bozhong.lhdataaccess.domain.DoctorPrescriptionDO;
+import com.bozhong.lhdataaccess.domain.DoctorInDiagnosisDO;
+import com.bozhong.lhdataaccess.domain.DoctorOutDiagnosisDO;
 import com.bozhong.lhdataaccess.domain.OrganizStructureDO;
-import com.bozhong.lhdataaccess.infrastructure.dao.DoctorPrescriptionDAO;
-import com.bozhong.lhdataaccess.infrastructure.dao.InPatientDAO;
-import com.bozhong.lhdataaccess.infrastructure.service.DoctorOrderService;
-import com.bozhong.lhdataaccess.infrastructure.service.DoctorPrescriptionService;
+import com.bozhong.lhdataaccess.infrastructure.dao.DoctorInDiagnosisDAO;
+import com.bozhong.lhdataaccess.infrastructure.dao.DoctorOutDiagnosisDAO;
+import com.bozhong.lhdataaccess.infrastructure.service.DoctorInDiagnosisService;
+import com.bozhong.lhdataaccess.infrastructure.service.DoctorOutDiagnosisService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -24,18 +24,18 @@ import java.util.Map;
 /**
  * User: 李志坚
  * Date: 2018/11/5
- * 处方数据的Serviced的实例
+ * 门诊诊断数据的Serviced的实例
  */
-@Service("doctorPrescriptionService")
-public class DoctorPrescriptionServiceImpl implements DoctorPrescriptionService {
+@Service("doctorInDiagnosisService")
+public class DoctorInDiagnosisServiceImpl implements DoctorInDiagnosisService {
 
     private static final Logger logger = LoggerFactory.getLogger("dlDataAccessLog");
 
     @Autowired
-    private DoctorPrescriptionDAO doctorPrescriptionDAO;
+    private DoctorInDiagnosisDAO doctorInDiagnosisDAO;
 
     @Override
-    public void dumpDoctorPrescription(Date lastUpdateTime) {
+    public void dumpDoctorInDiagnosis(Date lastUpdateTime) {
 
         int pageIndex = 0;
         int pageSize = 50;
@@ -45,11 +45,11 @@ public class DoctorPrescriptionServiceImpl implements DoctorPrescriptionService 
 
             //避免死循环
             if(pageIndex>2000){
-                logger.error("处方数据dump的时候，循环超出了范围，时间是"+currentTime);
+                logger.error("住院诊断数据dump的时候，循环超出了范围，时间是"+currentTime);
                 break;
             }
             try{
-                //调用中兴接口获取处方数据
+                //调用中兴接口获取住院诊断数据
                 Map<String, String> attributes = new HashMap<String, String>();
                 attributes.put("orgCode", "");
                 attributes.put("personId", "");
@@ -61,28 +61,27 @@ public class DoctorPrescriptionServiceImpl implements DoctorPrescriptionService 
                 Map resultMap = JSONObject.fromObject(HttpUtil.httpPostWithJson("http://118.178.131.147:6002/personDetails/organizationDetail", attributes));
                 JSONArray backBodyJson = JSONArray.fromObject(resultMap.get("outpatientDetail"));
                 if(backBodyJson==null || backBodyJson.size()<=0){
-                    logger.error("处方数据dump结束，时间是"+currentTime);
+                    logger.error("住院诊断数据dump结束，时间是"+currentTime);
                     break;
                 }
 
                 //把返回数据映射为我们自己的OutPatientDO对象,并将OutPatientDO同步到本地库
                 for(int i=0;i<backBodyJson.size();i++){
                     JSONObject job = backBodyJson.getJSONObject(i);
-                    DoctorPrescriptionDO doctorPrescriptionDO = new DoctorPrescriptionDO();
-                    doctorPrescriptionDO.setDoctorPrescriptionNumber(job.get("outRpDetSno").toString());
-                    doctorPrescriptionDO.setPatientId(job.get("patientId").toString());
-                    doctorPrescriptionDO.setOrganizStructureCode(job.get("orgCode").toString());
-                    doctorPrescriptionDO.setDoctorPrescriptionName(job.get("orderName").toString());
-                    doctorPrescriptionDO.setDoctorPrescriptionClassific(job.get("drugName").toString());
-                    doctorPrescriptionDO.setValidFlag(job.get("cancelFlag").toString());
-                    doctorPrescriptionDO.setCreateId(0L);
-                    doctorPrescriptionDO.setCreateTime(sdf.parse(job.get("invoiceTime").toString()));
-                    doctorPrescriptionDO.setUpdateId(0L);
-                    doctorPrescriptionDO.setUpdateTime(sdf.parse(job.get("lastEditedTime").toString()));
-                    doctorPrescriptionDAO.updateOrInsertDoctorPrescription(doctorPrescriptionDO);
+                    DoctorInDiagnosisDO doctorInDiagnosisDO = new DoctorInDiagnosisDO();
+                    doctorInDiagnosisDO.setDoctorDiagnosisNumber(job.get("diagSno").toString());
+                    doctorInDiagnosisDO.setDoctorDiagnosisName(job.get("diagName").toString());
+                    doctorInDiagnosisDO.setPatientId(job.get("patientId").toString());
+                    doctorInDiagnosisDO.setOrganizStructureCode(job.get("orgCode").toString());
+                    doctorInDiagnosisDO.setValidFlag(job.get("cancelFlag").toString());
+                    doctorInDiagnosisDO.setCreateId(0L);
+                    doctorInDiagnosisDO.setCreateTime(sdf.parse(job.get("diagTime").toString()));
+                    doctorInDiagnosisDO.setUpdateId(0L);
+                    doctorInDiagnosisDO.setUpdateTime(sdf.parse(job.get("lastEditedTime").toString()));
+                    doctorInDiagnosisDAO.updateOrInsertDoctorInDiagnosis(doctorInDiagnosisDO);
                 }
             }catch(Exception e){
-                logger.error("处方数据dump的时候报错"+e);
+                logger.error("住院诊断数据dump的时候报错"+e);
             }
             pageIndex = pageIndex+1;
         }
