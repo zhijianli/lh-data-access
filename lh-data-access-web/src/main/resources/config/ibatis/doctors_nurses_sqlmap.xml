@@ -28,6 +28,18 @@
     is_office, valid_flag, create_id, create_time, update_id, update_time
   </sql>
 
+
+  <select id="selectDataBylastUpdateTime" parameterType="com.bozhong.lhdataaccess.domain.DoctorsNursesDO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from lh_data_access_doctors_nurses
+    where
+    <![CDATA[
+            update_time >= #{updateTime,jdbcType=TIMESTAMP}
+        ]]>
+  </select>
+
+
   <insert id="updateOrInsertDoctorsNurses" useGeneratedKeys="true" keyProperty="id" parameterType="com.bozhong.lhdataaccess.domain.DoctorsNursesDO" >
 
     <!-- 查看是否存在memberid,如果存在及更新，否则插入 -->

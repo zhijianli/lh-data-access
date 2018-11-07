@@ -102,11 +102,10 @@ public class DoctorsNursesServiceImpl implements DoctorsNursesService {
     }
 
     @Override
-    public List<OrganizStructureDO> selectDataBylastUpdateTime(Date lastUpdateTime) {
-        OrganizStructureDO organizStructureDO = new OrganizStructureDO();
-        organizStructureDO.setUpdateTime(lastUpdateTime);
-//        return organizStructureDAO.selectDataBylastUpdateTime(organizStructureDO);
-        return null;
+    public List<DoctorsNursesDO> selectDataBylastUpdateTime(Date lastUpdateTime) {
+        DoctorsNursesDO doctorsNursesDO = new DoctorsNursesDO();
+        doctorsNursesDO.setUpdateTime(lastUpdateTime);
+        return doctorsNursesDAO.selectDataBylastUpdateTime(doctorsNursesDO);
     }
 
 }

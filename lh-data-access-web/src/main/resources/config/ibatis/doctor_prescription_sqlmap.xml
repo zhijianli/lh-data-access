@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bozhong.lhdataaccess.infrastructure.dao.DoctorPrescriptionDAO">
+  <resultMap id="BaseResultMap" type="com.bozhong.lhdataaccess.domain.DoctorPrescriptionDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="doctor_prescription_number" jdbcType="VARCHAR" property="doctorPrescriptionNumber" />
+    <result column="patient_id" jdbcType="VARCHAR" property="patientId" />
+    <result column="organiz_structure_code" jdbcType="VARCHAR" property="organizStructureCode" />
+    <result column="doctor_prescription_name" jdbcType="VARCHAR" property="doctorPrescriptionName" />
+    <result column="doctor_prescription_classific" jdbcType="VARCHAR" property="doctorPrescriptionClassific" />
+    <result column="valid_flag" jdbcType="VARCHAR" property="validFlag" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_id" jdbcType="BIGINT" property="updateId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, doctor_prescription_number, patient_id, organiz_structure_code, doctor_prescription_name, 
+    doctor_prescription_classific, valid_flag, create_id, create_time, update_id, update_time
+  </sql>
+
+  <insert id="updateOrInsertDoctorPrescription" useGeneratedKeys="true" keyProperty="id" parameterType="com.bozhong.lhdataaccess.domain.DoctorPrescriptionDO" >
+
+    <!-- 查看是否存在memberid,如果存在及更新，否则插入 -->
+    <selectKey keyProperty="count" order="BEFORE" resultType="int">
+      select count(*) as count from lh_data_access_doctor_prescription
+      where organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR} and
+      doctor_prescription_number = #{doctorPrescriptionNumber,jdbcType=VARCHAR}
+    </selectKey>
+
+    <!-- 如果大于0则更新 -->
+    <if test="count>0">
+      update lh_data_access_doctor_prescription
+      set doctor_prescription_name=#{doctorPrescriptionName,jdbcType=VARCHAR},
+      doctor_prescription_classific=#{doctorPrescriptionClassific,jdbcType=VARCHAR},
+      valid_flag=#{validFlag,jdbcType=VARCHAR},
+      update_time=#{updateTime,jdbcType=TIMESTAMP}
+      where organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR} and
+      doctor_prescription_number = #{doctorPrescriptionNumber,jdbcType=VARCHAR}
+    </if>
+
+    <!-- 如果等于0则保存 -->
+    <if test="count==0">
+      insert into lh_data_access_doctor_prescription(
+      doctor_prescription_number,
+      patient_id,
+      organiz_structure_code,
+      doctor_prescription_name,
+      doctor_prescription_classific,
+      valid_flag,
+      create_id,
+      create_time,
+      update_id,
+      update_time)
+      values(
+      #{doctorPrescriptionNumber,jdbcType=VARCHAR},
+      #{patientId,jdbcType=VARCHAR},
+      #{organizStructureCode,jdbcType=VARCHAR},
+      #{doctorPrescriptionName,jdbcType=VARCHAR},
+      #{doctorPrescriptionClassific,jdbcType=VARCHAR},
+      #{validFlag,jdbcType=VARCHAR},
+      #{createId,jdbcType=BIGINT},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{updateId,jdbcType=BIGINT},
+      #{updateTime,jdbcType=TIMESTAMP})
+    </if>
+
+  </insert>
+
+</mapper>

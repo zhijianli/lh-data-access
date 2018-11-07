@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bozhong.lhdataaccess.infrastructure.dao.HospitalWardDAO">
+  <resultMap id="BaseResultMap" type="com.bozhong.lhdataaccess.domain.HospitalWardDO">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="HOSPITAL_ID" jdbcType="BIGINT" property="hospitalId" />
+    <result column="VALID_FLAG" jdbcType="VARCHAR" property="validFlag" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="DEPT_ID" jdbcType="BIGINT" property="deptId" />
+    <result column="CREATE_BY" jdbcType="BIGINT" property="createBy" />
+    <result column="UPDATE_BY" jdbcType="BIGINT" property="updateBy" />
+    <result column="SORT_ORDER" jdbcType="INTEGER" property="sortOrder" />
+    <result column="third_part_id" jdbcType="VARCHAR" property="thirdPartId" />
+    <result column="third_part_name" jdbcType="VARCHAR" property="thirdPartName" />
+    <result column="NURSING_MANAG_THIRD_PART_ID" jdbcType="VARCHAR" property="nursingManagThirdPartId" />
+    <result column="NURSING_MANAG_THIRD_PART_NAME" jdbcType="VARCHAR" property="nursingManagThirdPartName" />
+    <result column="online_status" jdbcType="INTEGER" property="onlineStatus" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID, NAME, HOSPITAL_ID, VALID_FLAG, CREATE_TIME, UPDATE_TIME, PHONE, CODE, DEPT_ID, 
+    CREATE_BY, UPDATE_BY, SORT_ORDER, third_part_id, third_part_name, NURSING_MANAG_THIRD_PART_ID, 
+    NURSING_MANAG_THIRD_PART_NAME, online_status
+  </sql>
+
+
+  <insert id="updateOrInsertHospitalWard" useGeneratedKeys="true" keyProperty="id" parameterType="com.bozhong.lhdataaccess.domain.HospitalWardDO" >
+
+    <!-- 查看是否存在memberid,如果存在及更新，否则插入 -->
+    <selectKey keyProperty="count" order="BEFORE" resultType="int">
+      select count(*) as count from hospital_ward
+      where
+      HOSPITAL_ID = #{hospitalId,jdbcType=BIGINT} and
+      code = #{code,jdbcType=VARCHAR}
+    </selectKey>
+
+    <!-- 如果大于0则更新 -->
+    <if test="count>0">
+      update hospital_ward
+      set
+      name=#{name,jdbcType=VARCHAR},
+      DEPT_ID=#{deptId,jdbcType=BIGINT},
+      valid_flag=#{validFlag,jdbcType=VARCHAR},
+      update_time=#{updateTime,jdbcType=TIMESTAMP}
+      where
+      HOSPITAL_ID = #{hospitalId,jdbcType=BIGINT} and
+      code = #{code,jdbcType=VARCHAR}
+    </if>
+
+    <!-- 如果等于0则保存 -->
+    <if test="count==0">
+      insert into hospital_ward(
+      hospital_id,
+      name,
+      code,
+      dept_id,
+      valid_flag,
+      create_by,
+      create_time,
+      update_by,
+      update_time)
+      values(
+      #{hospitalId,jdbcType=BIGINT},
+      #{name,jdbcType=VARCHAR},
+      #{code,jdbcType=VARCHAR},
+      #{deptId,jdbcType=BIGINT},
+      #{validFlag,jdbcType=VARCHAR},
+      #{createBy,jdbcType=BIGINT},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{updateBy,jdbcType=BIGINT},
+      #{updateTime,jdbcType=TIMESTAMP})
+    </if>
+
+  </insert>
+
+  <select id="selectHospitalWardDO" parameterType="com.bozhong.lhdataaccess.domain.HospitalWardDO" resultMap="BaseResultMap">
+      select <include refid="Base_Column_List" /> from hospital_ward
+      where
+      HOSPITAL_ID = #{hospitalId,jdbcType=BIGINT} and
+      code = #{code,jdbcType=VARCHAR}
+  </select>
+
+  <!---->
+  <!--<insert id="insert" parameterType="com.itheima.mybatis.po.HospitalWard">-->
+    <!--insert into hospital_ward (ID, NAME, HOSPITAL_ID, -->
+      <!--VALID_FLAG, CREATE_TIME, UPDATE_TIME, -->
+      <!--PHONE, CODE, DEPT_ID, -->
+      <!--CREATE_BY, UPDATE_BY, SORT_ORDER, -->
+      <!--third_part_id, third_part_name, NURSING_MANAG_THIRD_PART_ID, -->
+      <!--NURSING_MANAG_THIRD_PART_NAME, online_status-->
+      <!--)-->
+    <!--values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{hospitalId,jdbcType=BIGINT}, -->
+      <!--#{validFlag,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, -->
+      <!--#{phone,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{deptId,jdbcType=BIGINT}, -->
+      <!--#{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT}, #{sortOrder,jdbcType=INTEGER}, -->
+      <!--#{thirdPartId,jdbcType=VARCHAR}, #{thirdPartName,jdbcType=VARCHAR}, #{nursingManagThirdPartId,jdbcType=VARCHAR}, -->
+      <!--#{nursingManagThirdPartName,jdbcType=VARCHAR}, #{onlineStatus,jdbcType=INTEGER}-->
+      <!--)-->
+  <!--</insert>-->
+  <!---->
+</mapper>

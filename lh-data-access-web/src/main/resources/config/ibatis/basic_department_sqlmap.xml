@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bozhong.lhdataaccess.infrastructure.dao.BasicDepartmentDAO">
+  <resultMap id="BaseResultMap" type="com.bozhong.lhdataaccess.domain.BasicDepartmentDO">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="HOSPITAL_ID" jdbcType="BIGINT" property="hospitalId" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="OTHER_NAME" jdbcType="VARCHAR" property="otherName" />
+    <result column="PARENT_ID" jdbcType="BIGINT" property="parentId" />
+    <result column="LOCATION" jdbcType="VARCHAR" property="location" />
+    <result column="SORT_ORDER" jdbcType="INTEGER" property="sortOrder" />
+    <result column="PIC_TIME" jdbcType="TIMESTAMP" property="picTime" />
+    <result column="PIC_NAME" jdbcType="VARCHAR" property="picName" />
+    <result column="IS_FEATURED" jdbcType="TINYINT" property="isFeatured" />
+    <result column="IS_SPECIAL" jdbcType="TINYINT" property="isSpecial" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="VALID_FLAG" jdbcType="VARCHAR" property="validFlag" />
+    <result column="CREATE_BY" jdbcType="BIGINT" property="createBy" />
+    <result column="UPDATE_BY" jdbcType="BIGINT" property="updateBy" />
+    <result column="is_biz_gift" jdbcType="TINYINT" property="isBizGift" />
+    <result column="LEVEL" jdbcType="INTEGER" property="level" />
+    <result column="DEFAULT_HOS_BRANCH" jdbcType="TINYINT" property="defaultHosBranch" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, HOSPITAL_ID, NAME, CODE, OTHER_NAME, PARENT_ID, LOCATION, SORT_ORDER, PIC_TIME, 
+    PIC_NAME, IS_FEATURED, IS_SPECIAL, CREATE_TIME, UPDATE_TIME, VALID_FLAG, CREATE_BY, 
+    UPDATE_BY, is_biz_gift, LEVEL, DEFAULT_HOS_BRANCH
+  </sql>
+
+  <insert id="updateOrInsertBasicDepartment" useGeneratedKeys="true" keyProperty="id" parameterType="com.bozhong.lhdataaccess.domain.BasicDepartmentDO" >
+
+    <!-- 查看是否存在memberid,如果存在及更新，否则插入 -->
+    <selectKey keyProperty="count" order="BEFORE" resultType="int">
+      select count(*) as count from basic_department
+      where
+      HOSPITAL_ID = #{hospitalId,jdbcType=BIGINT} and
+      code = #{code,jdbcType=VARCHAR}
+    </selectKey>
+
+    <!-- 如果大于0则更新 -->
+    <if test="count>0">
+      update basic_department
+      set
+      name=#{name,jdbcType=VARCHAR},
+      valid_flag=#{validFlag,jdbcType=VARCHAR},
+      update_time=#{updateTime,jdbcType=TIMESTAMP}
+      where
+      HOSPITAL_ID = #{hospitalId,jdbcType=BIGINT} and
+      code = #{code,jdbcType=VARCHAR}
+    </if>
+
+    <!-- 如果等于0则保存 -->
+    <if test="count==0">
+      insert into basic_department(
+      HOSPITAL_ID,
+      name,
+      code,
+      valid_flag,
+      create_by,
+      create_time,
+      update_by,
+      update_time)
+      values(
+      #{hospitalId,jdbcType=BIGINT},
+      #{name,jdbcType=VARCHAR},
+      #{code,jdbcType=VARCHAR},
+      #{validFlag,jdbcType=VARCHAR},
+      #{createBy,jdbcType=BIGINT},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{updateBy,jdbcType=BIGINT},
+      #{updateTime,jdbcType=TIMESTAMP})
+    </if>
+
+  </insert>
+
+  <select id="selectDeptId" parameterType="com.bozhong.lhdataaccess.domain.BasicDepartmentDO" resultType="Long">
+      select id from basic_department
+      where
+      HOSPITAL_ID = #{hospitalId,jdbcType=BIGINT} and
+      code = #{code,jdbcType=VARCHAR}
+  </select>
+
+  <!--<insert id="insert" parameterType="com.itheima.mybatis.po.BasicDepartment">-->
+    <!--insert into basic_department (ID, HOSPITAL_ID, NAME, -->
+      <!--CODE, OTHER_NAME, PARENT_ID, -->
+      <!--LOCATION, SORT_ORDER, PIC_TIME, -->
+      <!--PIC_NAME, IS_FEATURED, IS_SPECIAL, -->
+      <!--CREATE_TIME, UPDATE_TIME, VALID_FLAG, -->
+      <!--CREATE_BY, UPDATE_BY, is_biz_gift, -->
+      <!--LEVEL, DEFAULT_HOS_BRANCH, INTRODUCTION-->
+      <!--)-->
+    <!--values (#{id,jdbcType=BIGINT}, #{hospitalId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, -->
+      <!--#{code,jdbcType=VARCHAR}, #{otherName,jdbcType=VARCHAR}, #{parentId,jdbcType=BIGINT}, -->
+      <!--#{location,jdbcType=VARCHAR}, #{sortOrder,jdbcType=INTEGER}, #{picTime,jdbcType=TIMESTAMP}, -->
+      <!--#{picName,jdbcType=VARCHAR}, #{isFeatured,jdbcType=TINYINT}, #{isSpecial,jdbcType=TINYINT}, -->
+      <!--#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{validFlag,jdbcType=VARCHAR}, -->
+      <!--#{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT}, #{isBizGift,jdbcType=TINYINT}, -->
+      <!--#{level,jdbcType=INTEGER}, #{defaultHosBranch,jdbcType=TINYINT}, #{introduction,jdbcType=LONGVARCHAR}-->
+      <!--)-->
+  <!--</insert>-->
+</mapper>

@@ -5,9 +5,10 @@ import java.util.Date;
 /**
  * User: 李志坚
  * Date: 2018/11/5
- * 医生诊断的Model对象
+ * 住院诊断的Model对象
  */
-public class DoctorDiagnosisDO {
+public class DoctorInDiagnosisDO {
+
     private Long id;
 
     private String doctorDiagnosisNumber;

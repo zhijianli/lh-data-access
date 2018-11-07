@@ -5,23 +5,19 @@ import java.util.Date;
 /**
  * User: 李志坚
  * Date: 2018/11/5
- * 医生医嘱的Model对象
+ * 门诊诊断的Model对象
  */
-public class DoctorOrderDO {
+public class DoctorOutDiagnosisDO {
 
     private Long id;
 
-    private String doctorOrderNumber;
+    private String doctorDiagnosisNumber;
+
+    private String doctorDiagnosisName;
 
     private String patientId;
 
     private String organizStructureCode;
-
-    private String doctorOrderName;
-
-    private String doctorOrderLongTemporary;
-
-    private String doctorOrderClassific;
 
     private String validFlag;
 
@@ -41,12 +37,20 @@ public class DoctorOrderDO {
         this.id = id;
     }
 
-    public String getDoctorOrderNumber() {
-        return doctorOrderNumber;
+    public String getDoctorDiagnosisNumber() {
+        return doctorDiagnosisNumber;
     }
 
-    public void setDoctorOrderNumber(String doctorOrderNumber) {
-        this.doctorOrderNumber = doctorOrderNumber == null ? null : doctorOrderNumber.trim();
+    public void setDoctorDiagnosisNumber(String doctorDiagnosisNumber) {
+        this.doctorDiagnosisNumber = doctorDiagnosisNumber == null ? null : doctorDiagnosisNumber.trim();
+    }
+
+    public String getDoctorDiagnosisName() {
+        return doctorDiagnosisName;
+    }
+
+    public void setDoctorDiagnosisName(String doctorDiagnosisName) {
+        this.doctorDiagnosisName = doctorDiagnosisName == null ? null : doctorDiagnosisName.trim();
     }
 
     public String getPatientId() {
@@ -63,30 +67,6 @@ public class DoctorOrderDO {
 
     public void setOrganizStructureCode(String organizStructureCode) {
         this.organizStructureCode = organizStructureCode == null ? null : organizStructureCode.trim();
-    }
-
-    public String getDoctorOrderName() {
-        return doctorOrderName;
-    }
-
-    public void setDoctorOrderName(String doctorOrderName) {
-        this.doctorOrderName = doctorOrderName == null ? null : doctorOrderName.trim();
-    }
-
-    public String getDoctorOrderLongTemporary() {
-        return doctorOrderLongTemporary;
-    }
-
-    public void setDoctorOrderLongTemporary(String doctorOrderLongTemporary) {
-        this.doctorOrderLongTemporary = doctorOrderLongTemporary == null ? null : doctorOrderLongTemporary.trim();
-    }
-
-    public String getDoctorOrderClassific() {
-        return doctorOrderClassific;
-    }
-
-    public void setDoctorOrderClassific(String doctorOrderClassific) {
-        this.doctorOrderClassific = doctorOrderClassific == null ? null : doctorOrderClassific.trim();
     }
 
     public String getValidFlag() {
@@ -128,5 +108,4 @@ public class DoctorOrderDO {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
-
 }

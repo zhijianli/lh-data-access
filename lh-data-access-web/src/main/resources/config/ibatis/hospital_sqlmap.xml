@@ -117,6 +117,11 @@
 
   </insert>
 
+  <select id="selectHospitalId" parameterType="com.bozhong.lhdataaccess.domain.HospitalDO" resultType="Long">
+      select id from hospital
+      where code = #{code,jdbcType=VARCHAR}
+  </select>
+
   <!--<insert id="insert" parameterType="com.itheima.mybatis.po.Hospital">-->
     <!--insert into hospital (ID, NAME, ADDRESS, -->
       <!--PHONE, SITE, INTRO, -->

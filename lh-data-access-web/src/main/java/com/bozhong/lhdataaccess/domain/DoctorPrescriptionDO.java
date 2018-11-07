@@ -21,7 +21,7 @@ public class DoctorPrescriptionDO {
 
     private String doctorPrescriptionClassific;
 
-    private Integer validFlag;
+    private String validFlag;
 
     private Long createId;
 
@@ -79,11 +79,11 @@ public class DoctorPrescriptionDO {
         this.doctorPrescriptionClassific = doctorPrescriptionClassific == null ? null : doctorPrescriptionClassific.trim();
     }
 
-    public Integer getValidFlag() {
+    public String getValidFlag() {
         return validFlag;
     }
 
-    public void setValidFlag(Integer validFlag) {
+    public void setValidFlag(String validFlag) {
         this.validFlag = validFlag;
     }
 

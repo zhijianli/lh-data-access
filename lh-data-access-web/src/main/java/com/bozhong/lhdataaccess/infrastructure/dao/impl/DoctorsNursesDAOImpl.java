@@ -22,9 +22,8 @@ public class DoctorsNursesDAOImpl extends BaseDao implements DoctorsNursesDAO {
     }
 
     @Override
-    public List<OrganizStructureDO> selectDataBylastUpdateTime(OrganizStructureDO organizStructureDO) {
-        insert("selectDataBylastUpdateTime",organizStructureDO);
-        return null;
+    public List<DoctorsNursesDO> selectDataBylastUpdateTime(DoctorsNursesDO doctorsNursesDO) {
+        return findForList("selectDataBylastUpdateTime",doctorsNursesDO);
     }
 
 }

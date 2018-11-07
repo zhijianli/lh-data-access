@@ -28,6 +28,13 @@
         <mapper resource="config/ibatis/organiz_structure_sqlmap.xml"/>
         <mapper resource="config/ibatis/doctors_nurses_sqlmap.xml"/>
         <mapper resource="config/ibatis/hospital_sqlmap.xml"/>
+        <mapper resource="config/ibatis/basic_department_sqlmap.xml"/>
+        <mapper resource="config/ibatis/hospital_ward_sqlmap.xml"/>
+        <mapper resource="config/ibatis/in_patient_sqlmap.xml"/>
+        <mapper resource="config/ibatis/out_patient_sqlmap.xml"/>
+        <mapper resource="config/ibatis/doctor_order_sqlmap.xml"/>
+        <mapper resource="config/ibatis/doctor_prescription_sqlmap.xml"/>
+
         <!--<mapper resource="config/ibatis/flash_game_sqlmap.xml"/>-->
     </mappers>
 </configuration>

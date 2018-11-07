@@ -14,4 +14,6 @@ public interface HospitalDAO {
 
     void updateOrInsertHospital(HospitalDO hospitalDO);
 
+    Long selectHospitalId(HospitalDO hospitalDO);
+
 }

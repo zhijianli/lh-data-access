@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bozhong.lhdataaccess.infrastructure.dao.InPatientDAO">
+  <resultMap id="BaseResultMap" type="com.bozhong.lhdataaccess.domain.InPatientDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="patient_id" jdbcType="VARCHAR" property="patientId" />
+    <result column="patient_name" jdbcType="VARCHAR" property="patientName" />
+    <result column="patient_number" jdbcType="VARCHAR" property="patientNumber" />
+    <result column="bed_number" jdbcType="VARCHAR" property="bedNumber" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="date_of_birth" jdbcType="TIMESTAMP" property="dateOfBirth" />
+    <result column="attending_doctor_name" jdbcType="VARCHAR" property="attendingDoctorName" />
+    <result column="organiz_structure_code" jdbcType="VARCHAR" property="organizStructureCode" />
+    <result column="depart_code" jdbcType="VARCHAR" property="departCode" />
+    <result column="depart_name" jdbcType="VARCHAR" property="departName" />
+    <result column="ward_code" jdbcType="VARCHAR" property="wardCode" />
+    <result column="ward_name" jdbcType="VARCHAR" property="wardName" />
+    <result column="visit_time" jdbcType="TIMESTAMP" property="visitTime" />
+    <result column="visit_record" jdbcType="VARCHAR" property="visitRecord" />
+    <result column="visit_card_number" jdbcType="VARCHAR" property="visitCardNumber" />
+    <result column="diagnostic_update_time" jdbcType="TIMESTAMP" property="diagnosticUpdateTime" />
+    <result column="admission_time" jdbcType="TIMESTAMP" property="admissionTime" />
+    <result column="admission_state" jdbcType="VARCHAR" property="admissionState" />
+    <result column="hospital_record" jdbcType="VARCHAR" property="hospitalRecord" />
+    <result column="outcome" jdbcType="VARCHAR" property="outcome" />
+    <result column="valid_flag" jdbcType="VARCHAR" property="validFlag" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_id" jdbcType="BIGINT" property="updateId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, patient_id, patient_name, patient_number, bed_number, telephone, id_number, date_of_birth, 
+    attending_doctor_name, organiz_structure_code, depart_code, depart_name, ward_code, 
+    ward_name, visit_time, visit_record, visit_card_number, diagnostic_update_time, admission_time, 
+    admission_state, hospital_record, outcome, valid_flag, create_id, create_time, update_id, 
+    update_time
+  </sql>
+
+  <insert id="updateOrInsertInPatient" useGeneratedKeys="true" keyProperty="id" parameterType="com.bozhong.lhdataaccess.domain.InPatientDO" >
+
+    <!-- 查看是否存在memberid,如果存在及更新，否则插入 -->
+    <selectKey keyProperty="count" order="BEFORE" resultType="int">
+      select count(*) as count from lh_data_access_in_patient
+      where organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR} and
+      patient_id = #{patientId,jdbcType=VARCHAR}
+    </selectKey>
+
+    <!-- 如果大于0则更新 -->
+    <if test="count>0">
+      update lh_data_access_in_patient
+      set patient_name=#{patientName,jdbcType=VARCHAR},
+      patient_number=#{patientNumber,jdbcType=VARCHAR},
+      bed_number=#{bedNumber,jdbcType=VARCHAR},
+      telephone=#{telephone,jdbcType=VARCHAR},
+      id_number=#{idNumber,jdbcType=VARCHAR},
+      depart_code=#{departCode,jdbcType=VARCHAR},
+      depart_name=#{departName,jdbcType=VARCHAR},
+      ward_code=#{wardCode,jdbcType=VARCHAR},
+      ward_name=#{wardName,jdbcType=VARCHAR},
+      visit_time=#{visitTime,jdbcType=TIMESTAMP},
+      visit_card_number=#{visitCardNumber,jdbcType=VARCHAR},
+      admission_time=#{admissionTime,jdbcType=TIMESTAMP},
+      admission_state=#{admissionState,jdbcType=VARCHAR},
+      hospital_record=#{hospitalRecord,jdbcType=VARCHAR},
+      outcome=#{outcome,jdbcType=VARCHAR},
+      valid_flag=#{validFlag,jdbcType=VARCHAR},
+      update_time=#{updateTime,jdbcType=TIMESTAMP}
+      where organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR} and
+      patient_id = #{patientId,jdbcType=VARCHAR}
+    </if>
+
+    <!-- 如果等于0则保存 -->
+    <if test="count==0">
+      insert into lh_data_access_in_patient(
+      patient_id,
+      patient_name,
+      patient_number,
+      bed_number,
+      telephone,
+      id_number,
+      organiz_structure_code,
+      depart_code,
+      depart_name,
+      ward_code,
+      ward_name,
+      visit_time,
+      visit_card_number,
+      admission_time,
+      admission_state,
+      hospital_record,
+      outcome,
+      valid_flag,
+      create_id,
+      create_time,
+      update_id,
+      update_time)
+      values(
+      #{patientId,jdbcType=VARCHAR},
+      #{patientName,jdbcType=VARCHAR},
+      #{patientNumber,jdbcType=VARCHAR},
+      #{bedNumber,jdbcType=VARCHAR},
+      #{telephone,jdbcType=VARCHAR},
+      #{idNumber,jdbcType=VARCHAR},
+      #{organizStructureCode,jdbcType=VARCHAR},
+      #{departCode,jdbcType=VARCHAR},
+      #{departName,jdbcType=VARCHAR},
+      #{wardCode,jdbcType=VARCHAR},
+      #{wardName,jdbcType=VARCHAR},
+      #{visitTime,jdbcType=TIMESTAMP},
+      #{visitCardNumber,jdbcType=VARCHAR},
+      #{admissionTime,jdbcType=TIMESTAMP},
+      #{admissionState,jdbcType=VARCHAR},
+      #{hospitalRecord,jdbcType=VARCHAR},
+      #{outcome,jdbcType=VARCHAR},
+      #{validFlag,jdbcType=VARCHAR},
+      #{createId,jdbcType=BIGINT},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{updateId,jdbcType=BIGINT},
+      #{updateTime,jdbcType=TIMESTAMP})
+    </if>
+
+  </insert>
+
+  <!--<insert id="insert" parameterType="com.itheima.mybatis.po.LhDataAccessInPatient">-->
+    <!--insert into lh_data_access_in_patient (id, patient_id, patient_name, -->
+      <!--patient_number, bed_number, telephone, -->
+      <!--id_number, date_of_birth, attending_doctor_name, -->
+      <!--organiz_structure_code, depart_code, depart_name, -->
+      <!--ward_code, ward_name, visit_time, -->
+      <!--visit_record, visit_card_number, diagnostic_update_time, -->
+      <!--admission_time, admission_state, hospital_record, -->
+      <!--outcome, valid_flag, create_id, -->
+      <!--create_time, update_id, update_time-->
+      <!--)-->
+    <!--values (#{id,jdbcType=BIGINT}, #{patientId,jdbcType=VARCHAR}, #{patientName,jdbcType=VARCHAR}, -->
+      <!--#{patientNumber,jdbcType=VARCHAR}, #{bedNumber,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, -->
+      <!--#{idNumber,jdbcType=VARCHAR}, #{dateOfBirth,jdbcType=TIMESTAMP}, #{attendingDoctorName,jdbcType=VARCHAR}, -->
+      <!--#{organizStructureCode,jdbcType=VARCHAR}, #{departCode,jdbcType=VARCHAR}, #{departName,jdbcType=VARCHAR}, -->
+      <!--#{wardCode,jdbcType=VARCHAR}, #{wardName,jdbcType=VARCHAR}, #{visitTime,jdbcType=TIMESTAMP}, -->
+      <!--#{visitRecord,jdbcType=VARCHAR}, #{visitCardNumber,jdbcType=VARCHAR}, #{diagnosticUpdateTime,jdbcType=TIMESTAMP}, -->
+      <!--#{admissionTime,jdbcType=TIMESTAMP}, #{admissionState,jdbcType=VARCHAR}, #{hospitalRecord,jdbcType=VARCHAR}, -->
+      <!--#{outcome,jdbcType=VARCHAR}, #{validFlag,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, -->
+      <!--#{createTime,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}-->
+      <!--)-->
+  <!--</insert>-->
+
+</mapper>

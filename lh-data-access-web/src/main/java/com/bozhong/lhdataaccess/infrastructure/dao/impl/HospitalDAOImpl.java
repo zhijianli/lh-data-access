@@ -21,4 +21,9 @@ public class HospitalDAOImpl extends BaseDao implements HospitalDAO {
         insert("updateOrInsertHospital",hospitalDO);
     }
 
+    @Override
+    public Long selectHospitalId(HospitalDO hospitalDO) {
+        return (Long)findForObject("selectHospitalId",hospitalDO);
+    }
+
 }

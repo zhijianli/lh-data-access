@@ -1,12 +1,13 @@
 package com.bozhong.lhdataaccess.observation;
 
-import com.bozhong.lhdataaccess.infrastructure.service.DoctorsNursesService;
+import com.bozhong.lhdataaccess.infrastructure.service.*;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
-import com.bozhong.lhdataaccess.infrastructure.service.OrganizStructureService;
+
+import java.util.Date;
 
 /**
  * User: 李志坚
@@ -22,6 +23,18 @@ public class DumpDataPubisher implements ApplicationContextAware {
     @Autowired
     private DoctorsNursesService doctorsNursesService;
 
+    @Autowired
+    private InPatientService inPatientService;
+
+    @Autowired
+    private OutPatientService outPatientService;
+
+    @Autowired
+    private DoctorOrderService doctorOrderService;
+
+    @Autowired
+    private DoctorPrescriptionService doctorPrescriptionService;
+
     private ApplicationContext applicationContext;
 
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -31,11 +44,33 @@ public class DumpDataPubisher implements ApplicationContextAware {
 
         Boolean operationSuccess = false;
 
+        Date lastUpdateTime = event.getLastUpdateTime();
+
         //dump组织机构的数据
-//        organizStructureService.dumpOrganizStructureData(event.getLastUpdateTime());
+//        organizStructureService.dumpOrganizStructureData(lastUpdateTime);
 
         //dump医护的数据
-//        doctorsNursesService.dumpDoctorsNursesData(event.getLastUpdateTime());
+//        doctorsNursesService.dumpDoctorsNursesData(lastUpdateTime);
+
+        //dump门诊患者的数据
+        outPatientService.dumpOutPatient(lastUpdateTime);
+
+        //dump住院患者的数据
+        inPatientService.dumpInPatient(lastUpdateTime);
+
+        //dump医嘱的数据
+        doctorOrderService.dumpDoctorOrder(lastUpdateTime);
+
+        //dump处方的数据
+        doctorPrescriptionService.dumpDoctorPrescription(lastUpdateTime);
+
+        //dump门诊诊断的数据
+        
+
+        //dump住院诊断的数据
+
+
+
 
         //dump数据成功，发布事件（必须要前面的操作都执行成功了才能进行这步操作）
         operationSuccess = true;

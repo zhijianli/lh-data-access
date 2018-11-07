@@ -1,21 +1,21 @@
 package com.bozhong.lhdataaccess.domain;
 
 import java.util.Date;
-
 /**
  * User: 李志坚
  * Date: 2018/11/5
- * 门诊患者的Model对象
+ * 住院患者的Model对象
  */
-public class OutpatientDetailDO {
-
+public class InPatientDO {
     private Long id;
 
-    private Long patientId;
+    private String patientId;
 
     private String patientName;
 
-    private String organizStructureCode;
+    private String patientNumber;
+
+    private String bedNumber;
 
     private String telephone;
 
@@ -23,13 +23,17 @@ public class OutpatientDetailDO {
 
     private Date dateOfBirth;
 
-    private String isRevisit;
-
     private String attendingDoctorName;
+
+    private String organizStructureCode;
 
     private String departCode;
 
     private String departName;
+
+    private String wardCode;
+
+    private String wardName;
 
     private Date visitTime;
 
@@ -37,7 +41,17 @@ public class OutpatientDetailDO {
 
     private String visitCardNumber;
 
-    private Integer validFlag;
+    private Date diagnosticUpdateTime;
+
+    private Date admissionTime;
+
+    private String admissionState;
+
+    private String hospitalRecord;
+
+    private String outcome;
+
+    private String validFlag;
 
     private Long createId;
 
@@ -55,11 +69,11 @@ public class OutpatientDetailDO {
         this.id = id;
     }
 
-    public Long getPatientId() {
+    public String getPatientId() {
         return patientId;
     }
 
-    public void setPatientId(Long patientId) {
+    public void setPatientId(String patientId) {
         this.patientId = patientId;
     }
 
@@ -71,12 +85,20 @@ public class OutpatientDetailDO {
         this.patientName = patientName == null ? null : patientName.trim();
     }
 
-    public String getOrganizStructureCode() {
-        return organizStructureCode;
+    public String getPatientNumber() {
+        return patientNumber;
     }
 
-    public void setOrganizStructureCode(String organizStructureCode) {
-        this.organizStructureCode = organizStructureCode == null ? null : organizStructureCode.trim();
+    public void setPatientNumber(String patientNumber) {
+        this.patientNumber = patientNumber == null ? null : patientNumber.trim();
+    }
+
+    public String getBedNumber() {
+        return bedNumber;
+    }
+
+    public void setBedNumber(String bedNumber) {
+        this.bedNumber = bedNumber == null ? null : bedNumber.trim();
     }
 
     public String getTelephone() {
@@ -103,20 +125,20 @@ public class OutpatientDetailDO {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getIsRevisit() {
-        return isRevisit;
-    }
-
-    public void setIsRevisit(String isRevisit) {
-        this.isRevisit = isRevisit == null ? null : isRevisit.trim();
-    }
-
     public String getAttendingDoctorName() {
         return attendingDoctorName;
     }
 
     public void setAttendingDoctorName(String attendingDoctorName) {
         this.attendingDoctorName = attendingDoctorName == null ? null : attendingDoctorName.trim();
+    }
+
+    public String getOrganizStructureCode() {
+        return organizStructureCode;
+    }
+
+    public void setOrganizStructureCode(String organizStructureCode) {
+        this.organizStructureCode = organizStructureCode == null ? null : organizStructureCode.trim();
     }
 
     public String getDepartCode() {
@@ -133,6 +155,22 @@ public class OutpatientDetailDO {
 
     public void setDepartName(String departName) {
         this.departName = departName == null ? null : departName.trim();
+    }
+
+    public String getWardCode() {
+        return wardCode;
+    }
+
+    public void setWardCode(String wardCode) {
+        this.wardCode = wardCode == null ? null : wardCode.trim();
+    }
+
+    public String getWardName() {
+        return wardName;
+    }
+
+    public void setWardName(String wardName) {
+        this.wardName = wardName == null ? null : wardName.trim();
     }
 
     public Date getVisitTime() {
@@ -159,11 +197,51 @@ public class OutpatientDetailDO {
         this.visitCardNumber = visitCardNumber == null ? null : visitCardNumber.trim();
     }
 
-    public Integer getValidFlag() {
+    public Date getDiagnosticUpdateTime() {
+        return diagnosticUpdateTime;
+    }
+
+    public void setDiagnosticUpdateTime(Date diagnosticUpdateTime) {
+        this.diagnosticUpdateTime = diagnosticUpdateTime;
+    }
+
+    public Date getAdmissionTime() {
+        return admissionTime;
+    }
+
+    public void setAdmissionTime(Date admissionTime) {
+        this.admissionTime = admissionTime;
+    }
+
+    public String getAdmissionState() {
+        return admissionState;
+    }
+
+    public void setAdmissionState(String admissionState) {
+        this.admissionState = admissionState == null ? null : admissionState.trim();
+    }
+
+    public String getHospitalRecord() {
+        return hospitalRecord;
+    }
+
+    public void setHospitalRecord(String hospitalRecord) {
+        this.hospitalRecord = hospitalRecord == null ? null : hospitalRecord.trim();
+    }
+
+    public String getOutcome() {
+        return outcome;
+    }
+
+    public void setOutcome(String outcome) {
+        this.outcome = outcome == null ? null : outcome.trim();
+    }
+
+    public String getValidFlag() {
         return validFlag;
     }
 
-    public void setValidFlag(Integer validFlag) {
+    public void setValidFlag(String validFlag) {
         this.validFlag = validFlag;
     }
 
