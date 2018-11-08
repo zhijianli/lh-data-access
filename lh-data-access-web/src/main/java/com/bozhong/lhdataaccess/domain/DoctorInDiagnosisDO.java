@@ -15,11 +15,15 @@ public class DoctorInDiagnosisDO {
 
     private String doctorDiagnosisName;
 
+    private String doctorDiagnosisCode;
+
     private String patientId;
 
     private String organizStructureCode;
 
-    private Integer validFlag;
+    private Date lastEditedTime;
+
+    private String validFlag;
 
     private Long createId;
 
@@ -28,6 +32,28 @@ public class DoctorInDiagnosisDO {
     private Long updateId;
 
     private Date updateTime;
+
+    private int count;
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public String getDoctorDiagnosisCode() {
+        return doctorDiagnosisCode;
+    }
+
+    public void setDoctorDiagnosisCode(String doctorDiagnosisCode) {
+        this.doctorDiagnosisCode = doctorDiagnosisCode;
+    }
+
+    public Date getLastEditedTime() {
+        return lastEditedTime;
+    }
+
+    public void setLastEditedTime(Date lastEditedTime) {
+        this.lastEditedTime = lastEditedTime;
+    }
 
     public Long getId() {
         return id;
@@ -69,11 +95,11 @@ public class DoctorInDiagnosisDO {
         this.organizStructureCode = organizStructureCode == null ? null : organizStructureCode.trim();
     }
 
-    public Integer getValidFlag() {
+    public String getValidFlag() {
         return validFlag;
     }
 
-    public void setValidFlag(Integer validFlag) {
+    public void setValidFlag(String validFlag) {
         this.validFlag = validFlag;
     }
 

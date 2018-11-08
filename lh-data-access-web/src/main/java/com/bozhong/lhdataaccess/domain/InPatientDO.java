@@ -13,8 +13,6 @@ public class InPatientDO {
 
     private String patientName;
 
-    private String patientNumber;
-
     private String bedNumber;
 
     private String telephone;
@@ -39,8 +37,6 @@ public class InPatientDO {
 
     private String visitRecord;
 
-    private String visitCardNumber;
-
     private Date diagnosticUpdateTime;
 
     private Date admissionTime;
@@ -51,6 +47,14 @@ public class InPatientDO {
 
     private String outcome;
 
+    private String outPatientNumber;
+
+    private String inPatientNumber;
+
+    private String inPatientFlowNumber;
+
+    private Date lastEditedTime;
+
     private String validFlag;
 
     private Long createId;
@@ -60,6 +64,44 @@ public class InPatientDO {
     private Long updateId;
 
     private Date updateTime;
+
+    private int count;
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public String getOutPatientNumber() {
+        return outPatientNumber;
+    }
+
+    public void setOutPatientNumber(String outPatientNumber) {
+        this.outPatientNumber = outPatientNumber;
+    }
+
+    public String getInPatientNumber() {
+        return inPatientNumber;
+    }
+
+    public void setInPatientNumber(String inPatientNumber) {
+        this.inPatientNumber = inPatientNumber;
+    }
+
+    public String getInPatientFlowNumber() {
+        return inPatientFlowNumber;
+    }
+
+    public void setInPatientFlowNumber(String inPatientFlowNumber) {
+        this.inPatientFlowNumber = inPatientFlowNumber;
+    }
+
+    public Date getLastEditedTime() {
+        return lastEditedTime;
+    }
+
+    public void setLastEditedTime(Date lastEditedTime) {
+        this.lastEditedTime = lastEditedTime;
+    }
 
     public Long getId() {
         return id;
@@ -83,14 +125,6 @@ public class InPatientDO {
 
     public void setPatientName(String patientName) {
         this.patientName = patientName == null ? null : patientName.trim();
-    }
-
-    public String getPatientNumber() {
-        return patientNumber;
-    }
-
-    public void setPatientNumber(String patientNumber) {
-        this.patientNumber = patientNumber == null ? null : patientNumber.trim();
     }
 
     public String getBedNumber() {
@@ -187,14 +221,6 @@ public class InPatientDO {
 
     public void setVisitRecord(String visitRecord) {
         this.visitRecord = visitRecord == null ? null : visitRecord.trim();
-    }
-
-    public String getVisitCardNumber() {
-        return visitCardNumber;
-    }
-
-    public void setVisitCardNumber(String visitCardNumber) {
-        this.visitCardNumber = visitCardNumber == null ? null : visitCardNumber.trim();
     }
 
     public Date getDiagnosticUpdateTime() {

@@ -15,6 +15,7 @@
     <result column="work_number" jdbcType="VARCHAR" property="workNumber" />
     <result column="date_of_birth" jdbcType="TIMESTAMP" property="dateOfBirth" />
     <result column="is_office" jdbcType="VARCHAR" property="isOffice" />
+    <result column="last_edited_time" jdbcType="TIMESTAMP" property="lastEditedTime" />
     <result column="valid_flag" jdbcType="VARCHAR" property="validFlag" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -25,7 +26,7 @@
   <sql id="Base_Column_List">
     id, name, sex, telephone, organiz_structure_code, depart_ward_code, depart_ward_name,
     emp_code, job_title_code, current_professional_code, work_number, date_of_birth,
-    is_office, valid_flag, create_id, create_time, update_id, update_time
+    is_office, last_edited_time, valid_flag, create_id, create_time, update_id, update_time
   </sql>
 
 
@@ -35,7 +36,7 @@
     from lh_data_access_doctors_nurses
     where
     <![CDATA[
-            update_time >= #{updateTime,jdbcType=TIMESTAMP}
+            last_edited_time >= #{lastEditedTime,jdbcType=TIMESTAMP}
         ]]>
   </select>
 
@@ -63,6 +64,7 @@
       work_number=#{workNumber,jdbcType=VARCHAR},
       date_of_birth=#{dateOfBirth,jdbcType=TIMESTAMP},
       is_office=#{isOffice,jdbcType=VARCHAR},
+      last_edited_time=#{lastEditedTime,jdbcType=TIMESTAMP},
       valid_flag=#{validFlag,jdbcType=VARCHAR},
       update_time=#{updateTime,jdbcType=TIMESTAMP}
       where organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR} and
@@ -84,6 +86,7 @@
       work_number,
       date_of_birth,
       is_office,
+      last_edited_time,
       valid_flag,
       create_id,
       create_time,
@@ -102,6 +105,7 @@
       #{workNumber,jdbcType=VARCHAR},
       #{dateOfBirth,jdbcType=TIMESTAMP},
       #{isOffice,jdbcType=VARCHAR},
+      #{lastEditedTime,jdbcType=TIMESTAMP},
       #{validFlag,jdbcType=VARCHAR},
       #{createId,jdbcType=BIGINT},
       #{createTime,jdbcType=TIMESTAMP},

@@ -5,6 +5,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -59,22 +60,22 @@ public class DumpDataPubisher implements ApplicationContextAware {
 //        doctorsNursesService.dumpDoctorsNursesData(lastUpdateTime);
 
         //dump门诊患者的数据
-        outPatientService.dumpOutPatient(lastUpdateTime);
-
-        //dump住院患者的数据
-        inPatientService.dumpInPatient(lastUpdateTime);
-
-        //dump医嘱的数据
-        doctorOrderService.dumpDoctorOrder(lastUpdateTime);
-
-        //dump处方的数据
-        doctorPrescriptionService.dumpDoctorPrescription(lastUpdateTime);
-
-        //dump门诊诊断的数据
-        doctorOutDiagnosisService.dumpDoctorOutDiagnosis(lastUpdateTime);
-
-        //dump住院诊断的数据
-        doctorInDiagnosisService.dumpDoctorInDiagnosis(lastUpdateTime);
+//        outPatientService.dumpOutPatient(lastUpdateTime);
+//
+//        //dump住院患者的数据
+//        inPatientService.dumpInPatient(lastUpdateTime);
+//
+//        //dump医嘱的数据
+//        doctorOrderService.dumpDoctorOrder(lastUpdateTime);
+//
+//        //dump处方的数据
+//        doctorPrescriptionService.dumpDoctorPrescription(lastUpdateTime);
+//
+//        //dump门诊诊断的数据
+//        doctorOutDiagnosisService.dumpDoctorOutDiagnosis(lastUpdateTime);
+//
+//        //dump住院诊断的数据
+//        doctorInDiagnosisService.dumpDoctorInDiagnosis(lastUpdateTime);
 
 
 

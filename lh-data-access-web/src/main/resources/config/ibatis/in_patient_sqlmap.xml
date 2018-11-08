@@ -5,7 +5,6 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="patient_id" jdbcType="VARCHAR" property="patientId" />
     <result column="patient_name" jdbcType="VARCHAR" property="patientName" />
-    <result column="patient_number" jdbcType="VARCHAR" property="patientNumber" />
     <result column="bed_number" jdbcType="VARCHAR" property="bedNumber" />
     <result column="telephone" jdbcType="VARCHAR" property="telephone" />
     <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
@@ -24,6 +23,7 @@
     <result column="admission_state" jdbcType="VARCHAR" property="admissionState" />
     <result column="hospital_record" jdbcType="VARCHAR" property="hospitalRecord" />
     <result column="outcome" jdbcType="VARCHAR" property="outcome" />
+    <result column="last_edited_time" jdbcType="TIMESTAMP" property="lastEditedTime" />
     <result column="valid_flag" jdbcType="VARCHAR" property="validFlag" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -32,10 +32,10 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    id, patient_id, patient_name, patient_number, bed_number, telephone, id_number, date_of_birth, 
+    id, patient_id, patient_name, bed_number, telephone, id_number, date_of_birth,
     attending_doctor_name, organiz_structure_code, depart_code, depart_name, ward_code, 
     ward_name, visit_time, visit_record, visit_card_number, diagnostic_update_time, admission_time, 
-    admission_state, hospital_record, outcome, valid_flag, create_id, create_time, update_id, 
+    admission_state, hospital_record, outcome, last_edited_time, valid_flag, create_id, create_time, update_id,
     update_time
   </sql>
 
@@ -45,14 +45,14 @@
     <selectKey keyProperty="count" order="BEFORE" resultType="int">
       select count(*) as count from lh_data_access_in_patient
       where organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR} and
-      patient_id = #{patientId,jdbcType=VARCHAR}
+      patient_id = #{patientId,jdbcType=VARCHAR} and
+      in_patient_flow_number = #{inPatientFlowNumber,jdbcType=VARCHAR}
     </selectKey>
 
     <!-- 如果大于0则更新 -->
     <if test="count>0">
       update lh_data_access_in_patient
       set patient_name=#{patientName,jdbcType=VARCHAR},
-      patient_number=#{patientNumber,jdbcType=VARCHAR},
       bed_number=#{bedNumber,jdbcType=VARCHAR},
       telephone=#{telephone,jdbcType=VARCHAR},
       id_number=#{idNumber,jdbcType=VARCHAR},
@@ -61,15 +61,19 @@
       ward_code=#{wardCode,jdbcType=VARCHAR},
       ward_name=#{wardName,jdbcType=VARCHAR},
       visit_time=#{visitTime,jdbcType=TIMESTAMP},
-      visit_card_number=#{visitCardNumber,jdbcType=VARCHAR},
+      out_patient_number=#{outPatientNumber,jdbcType=VARCHAR},
+      in_patient_number=#{inPatientNumber,jdbcType=VARCHAR},
+      in_patient_flow_number=#{inPatientFlowNumber,jdbcType=VARCHAR},
       admission_time=#{admissionTime,jdbcType=TIMESTAMP},
       admission_state=#{admissionState,jdbcType=VARCHAR},
       hospital_record=#{hospitalRecord,jdbcType=VARCHAR},
       outcome=#{outcome,jdbcType=VARCHAR},
+      last_edited_time=#{lastEditedTime,jdbcType=TIMESTAMP},
       valid_flag=#{validFlag,jdbcType=VARCHAR},
       update_time=#{updateTime,jdbcType=TIMESTAMP}
       where organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR} and
-      patient_id = #{patientId,jdbcType=VARCHAR}
+      patient_id = #{patientId,jdbcType=VARCHAR} and
+      in_patient_flow_number = #{inPatientFlowNumber,jdbcType=VARCHAR}
     </if>
 
     <!-- 如果等于0则保存 -->
@@ -77,7 +81,6 @@
       insert into lh_data_access_in_patient(
       patient_id,
       patient_name,
-      patient_number,
       bed_number,
       telephone,
       id_number,
@@ -87,11 +90,14 @@
       ward_code,
       ward_name,
       visit_time,
-      visit_card_number,
+      out_patient_number,
+      in_patient_number,
+      in_patient_flow_number,
       admission_time,
       admission_state,
       hospital_record,
       outcome,
+      last_edited_time,
       valid_flag,
       create_id,
       create_time,
@@ -100,7 +106,6 @@
       values(
       #{patientId,jdbcType=VARCHAR},
       #{patientName,jdbcType=VARCHAR},
-      #{patientNumber,jdbcType=VARCHAR},
       #{bedNumber,jdbcType=VARCHAR},
       #{telephone,jdbcType=VARCHAR},
       #{idNumber,jdbcType=VARCHAR},
@@ -110,11 +115,14 @@
       #{wardCode,jdbcType=VARCHAR},
       #{wardName,jdbcType=VARCHAR},
       #{visitTime,jdbcType=TIMESTAMP},
-      #{visitCardNumber,jdbcType=VARCHAR},
+      #{outPatientNumber,jdbcType=VARCHAR},
+      #{inPatientNumber,jdbcType=VARCHAR},
+      #{inPatientFlowNumber,jdbcType=VARCHAR},
       #{admissionTime,jdbcType=TIMESTAMP},
       #{admissionState,jdbcType=VARCHAR},
       #{hospitalRecord,jdbcType=VARCHAR},
       #{outcome,jdbcType=VARCHAR},
+      #{lastEditedTime,jdbcType=TIMESTAMP},
       #{validFlag,jdbcType=VARCHAR},
       #{createId,jdbcType=BIGINT},
       #{createTime,jdbcType=TIMESTAMP},

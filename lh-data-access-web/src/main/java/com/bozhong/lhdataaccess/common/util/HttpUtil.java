@@ -58,7 +58,7 @@ public class HttpUtil {
 //
 //    }
 
-    public static String httpPostWithJson(String urlStr,  Map<String,String> attributes) {
+    public static String httpPostWithJson(String urlStr,  Map<String,Object> attributes) {
 
         String json = JSON.toJSONString(attributes);
 
@@ -102,5 +102,6 @@ public class HttpUtil {
         //第五步：处理返回值
         return returnValue;
     }
+
 
 }

@@ -8,6 +8,7 @@ package com.bozhong.lhdataaccess.infrastructure.service.impl;
 //import com.bozhong.longhuawebsite.infrastructure.service.DiseaseInfoReadService;
 //import com.google.common.base.Function;
 
+import com.bozhong.lhdataaccess.client.common.constants.util.StringUtil;
 import com.bozhong.lhdataaccess.common.util.HttpUtil;
 import com.bozhong.lhdataaccess.domain.DoctorsNursesDO;
 import com.bozhong.lhdataaccess.domain.OrganizStructureDO;
@@ -47,24 +48,33 @@ public class DoctorsNursesServiceImpl implements DoctorsNursesService {
         int pageIndex = 0;
         int pageSize = 50;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date currentTime = new Date();
+
         while(true){
 
+            Date currentTime = new Date();
+
             //避免死循环
-            if(pageIndex>2000){
+            if(pageIndex>500){
                 logger.error("医护数据dump的时候，循环超出了范围，时间是"+currentTime);
                 break;
             }
             try{
                 //调用中兴接口获取医护数据
-                Map<String, String> attributes = new HashMap<String, String>();
+                Map<String, Object> attributes = new HashMap<String, Object>();
                 attributes.put("empCode", "");
                 attributes.put("orgCode", "");
                 attributes.put("deptCode", "");
                 attributes.put("pageIndex",Integer.toString(pageIndex));
                 attributes.put("pageSize", Integer.toString(pageSize));
                 attributes.put("lastEditedTime", sdf.format(lastUpdateTime));
-                Map resultMap = JSONObject.fromObject(HttpUtil.httpPostWithJson("http://118.178.131.147:6002/personDetails/doctorDetail", attributes));
+                Map resultMap = JSONObject.fromObject(HttpUtil.httpPostWithJson("http://118.178.131.147:6003/hospital/personDetails/doctorDetail", attributes));
+                Object code = resultMap.get("code");
+                if(code==null || !"200".equals(code.toString())){
+                    logger.error("医护数据dump的时候，调用接口出错，code = "+code+",msg = "+(String)resultMap.get("msg"));
+                    pageIndex = pageIndex+1;
+                    continue;
+                }
+
                 JSONArray backBodyJson = JSONArray.fromObject(resultMap.get("doctor"));
                 if(backBodyJson==null || backBodyJson.size()<=0){
                     logger.error("医护数据dump结束，时间是"+currentTime);
@@ -85,8 +95,12 @@ public class DoctorsNursesServiceImpl implements DoctorsNursesService {
                     doctorsNursesDO.setJobTitleCode(job.get("jobTitleCode").toString());
                     doctorsNursesDO.setCurrentProfessionalCode(job.get("currentProfessionalCode").toString());
                     doctorsNursesDO.setWorkNumber(job.get("gh").toString());
-                    doctorsNursesDO.setDateOfBirth(sdf.parse(job.get("dateOfBirth").toString()));
+                    String dateOfBirth = job.get("dateOfBirth").toString();
+                    if(StringUtil.isNotBlank(dateOfBirth)&&!"null".equals(dateOfBirth)){
+                        doctorsNursesDO.setDateOfBirth(sdf.parse(dateOfBirth));
+                    }
                     doctorsNursesDO.setIsOffice(job.get("inOffice").toString());
+                    doctorsNursesDO.setLastEditedTime(sdf.parse(job.get("lastEditedTime").toString()));
                     doctorsNursesDO.setValidFlag(job.get("cancelFlag").toString());
                     doctorsNursesDO.setCreateId(0L);
                     doctorsNursesDO.setCreateTime(currentTime);
@@ -96,6 +110,8 @@ public class DoctorsNursesServiceImpl implements DoctorsNursesService {
                 }
             }catch(Exception e){
                 logger.error("医护数据dump的时候报错"+e);
+                pageIndex = pageIndex+1;
+                continue;
             }
             pageIndex = pageIndex+1;
         }
@@ -104,7 +120,7 @@ public class DoctorsNursesServiceImpl implements DoctorsNursesService {
     @Override
     public List<DoctorsNursesDO> selectDataBylastUpdateTime(Date lastUpdateTime) {
         DoctorsNursesDO doctorsNursesDO = new DoctorsNursesDO();
-        doctorsNursesDO.setUpdateTime(lastUpdateTime);
+        doctorsNursesDO.setLastEditedTime(lastUpdateTime);
         return doctorsNursesDAO.selectDataBylastUpdateTime(doctorsNursesDO);
     }
 

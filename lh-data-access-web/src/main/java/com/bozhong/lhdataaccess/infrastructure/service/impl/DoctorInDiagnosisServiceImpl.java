@@ -16,15 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: 李志坚
  * Date: 2018/11/5
- * 门诊诊断数据的Serviced的实例
+ * 住院诊断数据的Serviced的实例
  */
 @Service("doctorInDiagnosisService")
 public class DoctorInDiagnosisServiceImpl implements DoctorInDiagnosisService {
@@ -40,8 +37,10 @@ public class DoctorInDiagnosisServiceImpl implements DoctorInDiagnosisService {
         int pageIndex = 0;
         int pageSize = 50;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date currentTime = new Date();
+
         while(true){
+
+            Date currentTime = new Date();
 
             //避免死循环
             if(pageIndex>2000){
@@ -50,16 +49,26 @@ public class DoctorInDiagnosisServiceImpl implements DoctorInDiagnosisService {
             }
             try{
                 //调用中兴接口获取住院诊断数据
-                Map<String, String> attributes = new HashMap<String, String>();
-                attributes.put("orgCode", "");
-                attributes.put("personId", "");
-                attributes.put("deptCode", "");
-                attributes.put("wardCode", "");
+                List<Map<String,String>> dataList = new ArrayList<Map<String,String>>();
+                Map<String, String> dataMap = new HashMap<String, String>();
+                dataMap.put("orgCode","");
+                dataMap.put("personId","");
+                dataMap.put("inSno","");
+                dataList.add(dataMap);
+
+                Map<String, Object> attributes = new HashMap<String, Object>();
                 attributes.put("pageIndex",Integer.toString(pageIndex));
                 attributes.put("pageSize", Integer.toString(pageSize));
                 attributes.put("lastEditedTime", sdf.format(lastUpdateTime));
-                Map resultMap = JSONObject.fromObject(HttpUtil.httpPostWithJson("http://118.178.131.147:6002/personDetails/organizationDetail", attributes));
-                JSONArray backBodyJson = JSONArray.fromObject(resultMap.get("outpatientDetail"));
+                Map resultMap = JSONObject.fromObject(HttpUtil.httpPostWithJson("http://118.178.131.147:6003/hospital/personDetails/inDiagnosticInfo", attributes));
+                Object code = resultMap.get("code");
+                if(code==null || !"200".equals(code.toString())){
+                    logger.error("住院诊断数据dump的时候，调用接口出错，code = "+code+",msg = "+(String)resultMap.get("msg"));
+                    pageIndex = pageIndex+1;
+                    continue;
+                }
+
+                JSONArray backBodyJson = JSONArray.fromObject(resultMap.get("inDiagnosticInfo"));
                 if(backBodyJson==null || backBodyJson.size()<=0){
                     logger.error("住院诊断数据dump结束，时间是"+currentTime);
                     break;
@@ -71,17 +80,21 @@ public class DoctorInDiagnosisServiceImpl implements DoctorInDiagnosisService {
                     DoctorInDiagnosisDO doctorInDiagnosisDO = new DoctorInDiagnosisDO();
                     doctorInDiagnosisDO.setDoctorDiagnosisNumber(job.get("diagSno").toString());
                     doctorInDiagnosisDO.setDoctorDiagnosisName(job.get("diagName").toString());
+                    doctorInDiagnosisDO.setDoctorDiagnosisCode(job.get("diagCode").toString());
                     doctorInDiagnosisDO.setPatientId(job.get("patientId").toString());
                     doctorInDiagnosisDO.setOrganizStructureCode(job.get("orgCode").toString());
+                    doctorInDiagnosisDO.setLastEditedTime(sdf.parse(job.get("lastEditedTime").toString()));
                     doctorInDiagnosisDO.setValidFlag(job.get("cancelFlag").toString());
                     doctorInDiagnosisDO.setCreateId(0L);
-                    doctorInDiagnosisDO.setCreateTime(sdf.parse(job.get("diagTime").toString()));
+                    doctorInDiagnosisDO.setCreateTime(currentTime);
                     doctorInDiagnosisDO.setUpdateId(0L);
-                    doctorInDiagnosisDO.setUpdateTime(sdf.parse(job.get("lastEditedTime").toString()));
+                    doctorInDiagnosisDO.setUpdateTime(currentTime);
                     doctorInDiagnosisDAO.updateOrInsertDoctorInDiagnosis(doctorInDiagnosisDO);
                 }
             }catch(Exception e){
                 logger.error("住院诊断数据dump的时候报错"+e);
+                pageIndex = pageIndex+1;
+                continue;
             }
             pageIndex = pageIndex+1;
         }
@@ -90,7 +103,7 @@ public class DoctorInDiagnosisServiceImpl implements DoctorInDiagnosisService {
     @Override
     public List<OrganizStructureDO> selectDataBylastUpdateTime(Date lastUpdateTime) {
         OrganizStructureDO organizStructureDO = new OrganizStructureDO();
-        organizStructureDO.setUpdateTime(lastUpdateTime);
+        organizStructureDO.setLastEditedTime(lastUpdateTime);
 //        return organizStructureDAO.selectDataBylastUpdateTime(organizStructureDO);
         return null;
     }

@@ -15,9 +15,13 @@ public class DoctorOutDiagnosisDO {
 
     private String doctorDiagnosisName;
 
+    private String doctorDiagnosisCode;
+
     private String patientId;
 
     private String organizStructureCode;
+
+    private Date lastEditedTime;
 
     private String validFlag;
 
@@ -28,6 +32,28 @@ public class DoctorOutDiagnosisDO {
     private Long updateId;
 
     private Date updateTime;
+
+    private int count;
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public String getDoctorDiagnosisCode() {
+        return doctorDiagnosisCode;
+    }
+
+    public void setDoctorDiagnosisCode(String doctorDiagnosisCode) {
+        this.doctorDiagnosisCode = doctorDiagnosisCode;
+    }
+
+    public Date getLastEditedTime() {
+        return lastEditedTime;
+    }
+
+    public void setLastEditedTime(Date lastEditedTime) {
+        this.lastEditedTime = lastEditedTime;
+    }
 
     public Long getId() {
         return id;

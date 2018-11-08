@@ -17,9 +17,11 @@ public class DoctorPrescriptionDO {
 
     private String organizStructureCode;
 
-    private String doctorPrescriptionName;
+    private String drugName;
 
     private String doctorPrescriptionClassific;
+
+    private Date lastEditedTime;
 
     private String validFlag;
 
@@ -30,6 +32,20 @@ public class DoctorPrescriptionDO {
     private Long updateId;
 
     private Date updateTime;
+
+    private int count;
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public Date getLastEditedTime() {
+        return lastEditedTime;
+    }
+
+    public void setLastEditedTime(Date lastEditedTime) {
+        this.lastEditedTime = lastEditedTime;
+    }
 
     public Long getId() {
         return id;
@@ -63,12 +79,12 @@ public class DoctorPrescriptionDO {
         this.organizStructureCode = organizStructureCode == null ? null : organizStructureCode.trim();
     }
 
-    public String getDoctorPrescriptionName() {
-        return doctorPrescriptionName;
+    public String getDrugName() {
+        return drugName;
     }
 
-    public void setDoctorPrescriptionName(String doctorPrescriptionName) {
-        this.doctorPrescriptionName = doctorPrescriptionName == null ? null : doctorPrescriptionName.trim();
+    public void setDrugName(String drugName) {
+        this.drugName = drugName;
     }
 
     public String getDoctorPrescriptionClassific() {

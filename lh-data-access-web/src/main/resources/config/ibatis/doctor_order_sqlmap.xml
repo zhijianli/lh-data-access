@@ -9,6 +9,8 @@
     <result column="doctor_order_name" jdbcType="VARCHAR" property="doctorOrderName" />
     <result column="doctor_order_long_temporary" jdbcType="VARCHAR" property="doctorOrderLongTemporary" />
     <result column="doctor_order_classific" jdbcType="VARCHAR" property="doctorOrderClassific" />
+    <result column="doctor_order_type_code" jdbcType="VARCHAR" property="doctorOrderTypeCode" />
+    <result column="last_edited_time" jdbcType="TIMESTAMP" property="lastEditedTime" />
     <result column="valid_flag" jdbcType="VARCHAR" property="validFlag" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -18,7 +20,7 @@
 
   <sql id="Base_Column_List">
     id, doctor_order_number, patient_id, organiz_structure_code, doctor_order_name, doctor_order_long_temporary, 
-    doctor_order_classific, valid_flag, create_id, create_time, update_id, update_time
+    doctor_order_classific, doctor_order_type_code, last_edited_time, valid_flag, create_id, create_time, update_id, update_time
   </sql>
 
   <insert id="updateOrInsertDoctorOrder" useGeneratedKeys="true" keyProperty="id" parameterType="com.bozhong.lhdataaccess.domain.DoctorOrderDO" >
@@ -36,6 +38,8 @@
       set doctor_order_name=#{doctorOrderName,jdbcType=VARCHAR},
       doctor_order_long_temporary=#{doctorOrderLongTemporary,jdbcType=VARCHAR},
       doctor_order_classific=#{doctorOrderClassific,jdbcType=VARCHAR},
+      doctor_order_type_code=#{doctorOrderTypeCode,jdbcType=VARCHAR},
+      last_edited_time=#{lastEditedTime,jdbcType=TIMESTAMP},
       valid_flag=#{validFlag,jdbcType=VARCHAR},
       update_time=#{updateTime,jdbcType=TIMESTAMP}
       where organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR} and
@@ -51,6 +55,8 @@
       doctor_order_name,
       doctor_order_long_temporary,
       doctor_order_classific,
+      doctor_order_type_code,
+      last_edited_time,
       valid_flag,
       create_id,
       create_time,
@@ -63,6 +69,8 @@
       #{doctorOrderName,jdbcType=VARCHAR},
       #{doctorOrderLongTemporary,jdbcType=VARCHAR},
       #{doctorOrderClassific,jdbcType=VARCHAR},
+      #{doctorOrderTypeCode,jdbcType=VARCHAR},
+      #{lastEditedTime,jdbcType=TIMESTAMP},
       #{validFlag,jdbcType=VARCHAR},
       #{createId,jdbcType=BIGINT},
       #{createTime,jdbcType=TIMESTAMP},

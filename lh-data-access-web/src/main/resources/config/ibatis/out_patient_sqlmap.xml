@@ -15,7 +15,9 @@
     <result column="depart_name" jdbcType="VARCHAR" property="departName" />
     <result column="visit_time" jdbcType="TIMESTAMP" property="visitTime" />
     <result column="visit_record" jdbcType="VARCHAR" property="visitRecord" />
-    <result column="visit_card_number" jdbcType="VARCHAR" property="visitCardNumber" />
+    <result column="out_patient_number" jdbcType="VARCHAR" property="outPatientNumber" />
+    <result column="out_patient_flow_number" jdbcType="VARCHAR" property="outPatientFlowNumber" />
+    <result column="last_edited_time" jdbcType="TIMESTAMP" property="lastEditedTime" />
     <result column="valid_flag" jdbcType="VARCHAR" property="validFlag" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -26,7 +28,7 @@
   <sql id="Base_Column_List">
     id, patient_id, patient_name, organiz_structure_code, telephone, id_number, date_of_birth,
     is_revisit, attending_doctor_name, depart_code, depart_name, visit_time, visit_record,
-    visit_card_number, valid_flag, create_id, create_time, update_id, update_time
+    out_patient_number, out_patient_flow_number, last_edited_time, valid_flag, create_id, create_time, update_id, update_time
   </sql>
 
   <insert id="updateOrInsertOutPatient" useGeneratedKeys="true" keyProperty="id" parameterType="com.bozhong.lhdataaccess.domain.OutPatientDO" >
@@ -35,7 +37,8 @@
     <selectKey keyProperty="count" order="BEFORE" resultType="int">
       select count(*) as count from lh_data_access_out_patient
       where organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR} and
-      patient_id = #{patientId,jdbcType=VARCHAR}
+      patient_id = #{patientId,jdbcType=VARCHAR} and
+      out_patient_flow_number = #{outPatientFlowNumber,jdbcType=VARCHAR}
     </selectKey>
 
     <!-- 如果大于0则更新 -->
@@ -48,11 +51,14 @@
       depart_name=#{departName,jdbcType=VARCHAR},
       visit_time=#{visitTime,jdbcType=TIMESTAMP},
       visit_record=#{visitRecord,jdbcType=VARCHAR},
-      visit_card_number=#{visitCardNumber,jdbcType=VARCHAR},
+      out_patient_number=#{outPatientNumber,jdbcType=VARCHAR},
+      out_patient_flow_number=#{outPatientFlowNumber,jdbcType=VARCHAR},
+      last_edited_time=#{lastEditedTime,jdbcType=TIMESTAMP},
       valid_flag=#{validFlag,jdbcType=VARCHAR},
       update_time=#{updateTime,jdbcType=TIMESTAMP}
       where organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR} and
-      patient_id = #{patientId,jdbcType=VARCHAR}
+      patient_id = #{patientId,jdbcType=VARCHAR} and
+      out_patient_flow_number = #{outPatientFlowNumber,jdbcType=VARCHAR}
     </if>
 
     <!-- 如果等于0则保存 -->
@@ -67,7 +73,9 @@
       depart_name,
       visit_time,
       visit_record,
-      visit_card_number,
+      out_patient_number,
+      out_patient_flow_number,
+      last_edited_time,
       valid_flag,
       create_id,
       create_time,
@@ -83,7 +91,9 @@
       #{departName,jdbcType=VARCHAR},
       #{visitTime,jdbcType=VARCHAR},
       #{visitRecord,jdbcType=VARCHAR},
-      #{visitCardNumber,jdbcType=VARCHAR},
+      #{outPatientNumber,jdbcType=VARCHAR},
+      #{outPatientFlowNumber,jdbcType=VARCHAR},
+      #{lastEditedTime,jdbcType=TIMESTAMP},
       #{validFlag,jdbcType=VARCHAR},
       #{createId,jdbcType=BIGINT},
       #{createTime,jdbcType=TIMESTAMP},

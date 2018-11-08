@@ -1,5 +1,6 @@
 package com.bozhong.lhdataaccess.infrastructure.service.impl;
 
+import com.bozhong.lhdataaccess.client.common.constants.util.StringUtil;
 import com.bozhong.lhdataaccess.common.util.HttpUtil;
 import com.bozhong.lhdataaccess.domain.InPatientDO;
 import com.bozhong.lhdataaccess.domain.OrganizStructureDO;
@@ -38,8 +39,10 @@ public class InPatientServiceImpl implements InPatientService {
         int pageIndex = 0;
         int pageSize = 50;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date currentTime = new Date();
+
         while(true){
+
+            Date currentTime = new Date();
 
             //避免死循环
             if(pageIndex>2000){
@@ -48,7 +51,7 @@ public class InPatientServiceImpl implements InPatientService {
             }
             try{
                 //调用中兴接口获取住院患者数据
-                Map<String, String> attributes = new HashMap<String, String>();
+                Map<String, Object> attributes = new HashMap<String, Object>();
                 attributes.put("orgCode", "");
                 attributes.put("personId", "");
                 attributes.put("deptCode", "");
@@ -56,7 +59,14 @@ public class InPatientServiceImpl implements InPatientService {
                 attributes.put("pageIndex",Integer.toString(pageIndex));
                 attributes.put("pageSize", Integer.toString(pageSize));
                 attributes.put("lastEditedTime", sdf.format(lastUpdateTime));
-                Map resultMap = JSONObject.fromObject(HttpUtil.httpPostWithJson("http://118.178.131.147:6002/personDetails/organizationDetail", attributes));
+                Map resultMap = JSONObject.fromObject(HttpUtil.httpPostWithJson("http://118.178.131.147:6003/hospital/personDetails/inpatientDetail", attributes));
+                Object code = resultMap.get("code");
+                if(code==null || !"200".equals(code.toString())){
+                    logger.error("住院患者数据dump的时候，调用接口出错，code = "+code+",msg = "+(String)resultMap.get("msg"));
+                    pageIndex = pageIndex+1;
+                    continue;
+                }
+
                 JSONArray backBodyJson = JSONArray.fromObject(resultMap.get("outpatientDetail"));
                 if(backBodyJson==null || backBodyJson.size()<=0){
                     logger.error("住院患者数据dump结束，时间是"+currentTime);
@@ -69,7 +79,6 @@ public class InPatientServiceImpl implements InPatientService {
                     InPatientDO inPatientDO = new InPatientDO();
                     inPatientDO.setPatientId(job.get("personId").toString());
                     inPatientDO.setPatientName(job.get("name").toString());
-                    inPatientDO.setPatientNumber(job.get("inNo").toString());
                     inPatientDO.setBedNumber(job.get("bedCode").toString());
                     inPatientDO.setTelephone(job.get("mailingPhoneNo").toString());
                     inPatientDO.setIdNumber(job.get("idcard").toString());
@@ -82,21 +91,29 @@ public class InPatientServiceImpl implements InPatientService {
                     inPatientDO.setWardName(job.get("wardName").toString());
                     inPatientDO.setVisitTime(sdf.parse(job.get("visitTime").toString()));
 //                    inPatientDO.setVisitRecord();
-                    inPatientDO.setVisitCardNumber(job.get("inNo").toString());
+//                    inPatientDO.setOutPatientNumber();
 //                    inPatientDO.setDiagnosticUpdateTime();
+                    inPatientDO.setInPatientNumber(job.get("inNo").toString());
+                    inPatientDO.setInPatientFlowNumber(job.get("inSno").toString());
                     inPatientDO.setAdmissionTime(sdf.parse(job.get("admDeptDateTime").toString()));
                     inPatientDO.setAdmissionState(job.get("dischargeDateTime").toString());
-                    inPatientDO.setHospitalRecord(job.get("inTimes").toString());
+//                    inPatientDO.setHospitalRecord(job.get("inTimes").toString());
                     inPatientDO.setOutcome(job.get("patientCondition").toString());
+                    String lastEditedTime = job.get("lastEditedTime").toString();
+                    if(StringUtil.isNotBlank(lastEditedTime)&&!"null".equals(lastEditedTime)) {
+                        inPatientDO.setLastEditedTime(sdf.parse(lastEditedTime));
+                    }
                     inPatientDO.setValidFlag(job.get("cancelFlag").toString());
                     inPatientDO.setCreateId(0L);
-                    inPatientDO.setCreateTime(sdf.parse(job.get("admitDate").toString()));
+                    inPatientDO.setCreateTime(currentTime);
                     inPatientDO.setUpdateId(0L);
-                    inPatientDO.setUpdateTime(sdf.parse(job.get("lastEditedTime").toString()));
+                    inPatientDO.setUpdateTime(currentTime);
                     inPatientDAO.updateOrInsertInPatient(inPatientDO);
                 }
             }catch(Exception e){
                 logger.error("住院患者数据dump的时候报错"+e);
+                pageIndex = pageIndex+1;
+                continue;
             }
             pageIndex = pageIndex+1;
         }
@@ -105,7 +122,7 @@ public class InPatientServiceImpl implements InPatientService {
     @Override
     public List<OrganizStructureDO> selectDataBylastUpdateTime(Date lastUpdateTime) {
         OrganizStructureDO organizStructureDO = new OrganizStructureDO();
-        organizStructureDO.setUpdateTime(lastUpdateTime);
+        organizStructureDO.setLastEditedTime(lastUpdateTime);
 //        return organizStructureDAO.selectDataBylastUpdateTime(organizStructureDO);
         return null;
     }

@@ -6,8 +6,9 @@
     <result column="doctor_prescription_number" jdbcType="VARCHAR" property="doctorPrescriptionNumber" />
     <result column="patient_id" jdbcType="VARCHAR" property="patientId" />
     <result column="organiz_structure_code" jdbcType="VARCHAR" property="organizStructureCode" />
-    <result column="doctor_prescription_name" jdbcType="VARCHAR" property="doctorPrescriptionName" />
+    <result column="drug_name" jdbcType="VARCHAR" property="drugName" />
     <result column="doctor_prescription_classific" jdbcType="VARCHAR" property="doctorPrescriptionClassific" />
+    <result column="last_edited_time" jdbcType="TIMESTAMP" property="lastEditedTime" />
     <result column="valid_flag" jdbcType="VARCHAR" property="validFlag" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -16,8 +17,8 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    id, doctor_prescription_number, patient_id, organiz_structure_code, doctor_prescription_name, 
-    doctor_prescription_classific, valid_flag, create_id, create_time, update_id, update_time
+    id, doctor_prescription_number, patient_id, organiz_structure_code, drug_name,
+    doctor_prescription_classific, last_edited_time, valid_flag, create_id, create_time, update_id, update_time
   </sql>
 
   <insert id="updateOrInsertDoctorPrescription" useGeneratedKeys="true" keyProperty="id" parameterType="com.bozhong.lhdataaccess.domain.DoctorPrescriptionDO" >
@@ -32,8 +33,9 @@
     <!-- 如果大于0则更新 -->
     <if test="count>0">
       update lh_data_access_doctor_prescription
-      set doctor_prescription_name=#{doctorPrescriptionName,jdbcType=VARCHAR},
+      set drug_name=#{drugName,jdbcType=VARCHAR},
       doctor_prescription_classific=#{doctorPrescriptionClassific,jdbcType=VARCHAR},
+      last_edited_time=#{lastEditedTime,jdbcType=TIMESTAMP},
       valid_flag=#{validFlag,jdbcType=VARCHAR},
       update_time=#{updateTime,jdbcType=TIMESTAMP}
       where organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR} and
@@ -46,8 +48,9 @@
       doctor_prescription_number,
       patient_id,
       organiz_structure_code,
-      doctor_prescription_name,
+      drug_name,
       doctor_prescription_classific,
+      last_edited_time,
       valid_flag,
       create_id,
       create_time,
@@ -57,8 +60,9 @@
       #{doctorPrescriptionNumber,jdbcType=VARCHAR},
       #{patientId,jdbcType=VARCHAR},
       #{organizStructureCode,jdbcType=VARCHAR},
-      #{doctorPrescriptionName,jdbcType=VARCHAR},
+      #{drugName,jdbcType=VARCHAR},
       #{doctorPrescriptionClassific,jdbcType=VARCHAR},
+      #{lastEditedTime,jdbcType=TIMESTAMP},
       #{validFlag,jdbcType=VARCHAR},
       #{createId,jdbcType=BIGINT},
       #{createTime,jdbcType=TIMESTAMP},

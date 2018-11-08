@@ -44,6 +44,7 @@
     <context:component-scan base-package="com.bozhong.lhdataaccess.application.process.*"/>
     <context:component-scan base-package="com.bozhong.lhdataaccess.restful.resources*"/>
     <context:component-scan base-package="com.bozhong.lhdataaccess.observation*"/>
+    <context:component-scan base-package="com.bozhong.lhdataaccess.rule*"/>
     <context:component-scan base-package="com.bozhong.lhdataaccess.worker"/>
     <context:component-scan base-package="com.bozhong.lhdataaccess.task"/>
 

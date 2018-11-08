@@ -40,8 +40,10 @@ public class OutPatientServiceImpl implements OutPatientService {
         int pageIndex = 0;
         int pageSize = 50;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date currentTime = new Date();
+
         while(true){
+
+            Date currentTime = new Date();
 
             //避免死循环
             if(pageIndex>2000){
@@ -50,7 +52,7 @@ public class OutPatientServiceImpl implements OutPatientService {
             }
             try{
                 //调用中兴接口获取门诊患者数据
-                Map<String, String> attributes = new HashMap<String, String>();
+                Map<String, Object> attributes = new HashMap<String, Object>();
                 attributes.put("orgCode", "");
                 attributes.put("personId", "");
                 attributes.put("deptCode", "");
@@ -58,7 +60,14 @@ public class OutPatientServiceImpl implements OutPatientService {
                 attributes.put("pageIndex",Integer.toString(pageIndex));
                 attributes.put("pageSize", Integer.toString(pageSize));
                 attributes.put("lastEditedTime", sdf.format(lastUpdateTime));
-                Map resultMap = JSONObject.fromObject(HttpUtil.httpPostWithJson("http://118.178.131.147:6002/personDetails/organizationDetail", attributes));
+                Map resultMap = JSONObject.fromObject(HttpUtil.httpPostWithJson("http://118.178.131.147:6003/hospital/personDetails/outpatientDetail", attributes));
+                Object code = resultMap.get("code");
+                if(code==null || !"200".equals(code.toString())){
+                    logger.error("门诊患者数据dump的时候，调用接口出错，code = "+code+",msg = "+(String)resultMap.get("msg"));
+                    pageIndex = pageIndex+1;
+                    continue;
+                }
+
                 JSONArray backBodyJson = JSONArray.fromObject(resultMap.get("outpatientDetail"));
                 if(backBodyJson==null || backBodyJson.size()<=0){
                     logger.error("门诊患者数据dump结束，时间是"+currentTime);
@@ -72,25 +81,29 @@ public class OutPatientServiceImpl implements OutPatientService {
                     outPatientDO.setPatientId(job.get("personId").toString());
                     outPatientDO.setPatientName(job.get("name").toString());
                     outPatientDO.setOrganizStructureCode(job.get("orgCode").toString());
-                    outPatientDO.setTelephone(job.get("tel").toString());
-                    outPatientDO.setIdNumber(job.get("idcard").toString());
+//                    outPatientDO.setTelephone(job.get("tel").toString());
+//                    outPatientDO.setIdNumber(job.get("idcard").toString());
 //                    outPatientDO.setDateOfBirth();
 //                    outPatientDO.setIsRevisit();
 //                    outPatientDO.setAttendingDoctorName();
                     outPatientDO.setDepartCode(job.get("deptCode").toString());
                     outPatientDO.setDepartName(job.get("deptName").toString());
                     outPatientDO.setVisitTime(sdf.parse(job.get("admissionsTime").toString()));
-                    outPatientDO.setVisitRecord(job.get("visitCount").toString());
-                    outPatientDO.setVisitCardNumber(job.get("orgInternalId").toString());
+//                    outPatientDO.setVisitRecord(job.get("visitCount").toString());
+                    outPatientDO.setOutPatientNumber(job.get("outNo").toString());
+                    outPatientDO.setOutPatientFlowNumber(job.get("outSno").toString());
+                    outPatientDO.setLastEditedTime(sdf.parse(job.get("lastEditedTime").toString()));
                     outPatientDO.setValidFlag(job.get("cancelFlag").toString());
                     outPatientDO.setCreateId(0L);
-                    outPatientDO.setCreateTime(sdf.parse(job.get("admitDate").toString()));
+                    outPatientDO.setCreateTime(currentTime);
                     outPatientDO.setUpdateId(0L);
-                    outPatientDO.setUpdateTime(sdf.parse(job.get("lastEditedTime").toString()));
+                    outPatientDO.setUpdateTime(currentTime);
                     outPatientDAO.updateOrInsertOutPatient(outPatientDO);
                 }
             }catch(Exception e){
                 logger.error("门诊患者数据dump的时候报错"+e);
+                pageIndex = pageIndex+1;
+                continue;
             }
             pageIndex = pageIndex+1;
         }
@@ -99,7 +112,7 @@ public class OutPatientServiceImpl implements OutPatientService {
     @Override
     public List<OrganizStructureDO> selectDataBylastUpdateTime(Date lastUpdateTime) {
         OrganizStructureDO organizStructureDO = new OrganizStructureDO();
-        organizStructureDO.setUpdateTime(lastUpdateTime);
+        organizStructureDO.setLastEditedTime(lastUpdateTime);
 //        return organizStructureDAO.selectDataBylastUpdateTime(organizStructureDO);
         return null;
     }

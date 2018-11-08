@@ -35,7 +35,11 @@ public class OutPatientDO {
 
     private String visitRecord;
 
-    private String visitCardNumber;
+    private String outPatientNumber;
+
+    private String outPatientFlowNumber;
+
+    private Date lastEditedTime;
 
     private String validFlag;
 
@@ -46,6 +50,36 @@ public class OutPatientDO {
     private Long updateId;
 
     private Date updateTime;
+
+    private int count;
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public String getOutPatientNumber() {
+        return outPatientNumber;
+    }
+
+    public void setOutPatientNumber(String outPatientNumber) {
+        this.outPatientNumber = outPatientNumber;
+    }
+
+    public String getOutPatientFlowNumber() {
+        return outPatientFlowNumber;
+    }
+
+    public void setOutPatientFlowNumber(String outPatientFlowNumber) {
+        this.outPatientFlowNumber = outPatientFlowNumber;
+    }
+
+    public Date getLastEditedTime() {
+        return lastEditedTime;
+    }
+
+    public void setLastEditedTime(Date lastEditedTime) {
+        this.lastEditedTime = lastEditedTime;
+    }
 
     public Long getId() {
         return id;
@@ -149,14 +183,6 @@ public class OutPatientDO {
 
     public void setVisitRecord(String visitRecord) {
         this.visitRecord = visitRecord == null ? null : visitRecord.trim();
-    }
-
-    public String getVisitCardNumber() {
-        return visitCardNumber;
-    }
-
-    public void setVisitCardNumber(String visitCardNumber) {
-        this.visitCardNumber = visitCardNumber == null ? null : visitCardNumber.trim();
     }
 
     public String getValidFlag() {

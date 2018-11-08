@@ -5,8 +5,10 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="doctor_diagnosis_number" jdbcType="VARCHAR" property="doctorDiagnosisNumber" />
     <result column="doctor_diagnosis_name" jdbcType="VARCHAR" property="doctorDiagnosisName" />
+    <result column="doctor_diagnosis_code" jdbcType="VARCHAR" property="doctorDiagnosisCode" />
     <result column="patient_id" jdbcType="VARCHAR" property="patientId" />
     <result column="organiz_structure_code" jdbcType="VARCHAR" property="organizStructureCode" />
+    <result column="last_edited_time" jdbcType="TIMESTAMP" property="lastEditedTime" />
     <result column="valid_flag" jdbcType="VARCHAR" property="validFlag" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -15,7 +17,7 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    id, doctor_diagnosis_number, doctor_diagnosis_name, patient_id, organiz_structure_code, 
+    id, doctor_diagnosis_number, doctor_diagnosis_name, doctor_diagnosis_code, patient_id, organiz_structure_code, last_edited_time,
     valid_flag, create_id, create_time, update_id, update_time
   </sql>
 
@@ -32,6 +34,8 @@
     <if test="count>0">
       update lh_data_access_doctor_out_diagnosis
       set doctor_diagnosis_name=#{doctorDiagnosisName,jdbcType=VARCHAR},
+      doctor_diagnosis_code=#{doctorDiagnosisCode,jdbcType=VARCHAR},
+      last_edited_time=#{lastEditedTime,jdbcType=TIMESTAMP},
       valid_flag=#{validFlag,jdbcType=VARCHAR},
       update_time=#{updateTime,jdbcType=TIMESTAMP}
       where organiz_structure_code = #{organizStructureCode,jdbcType=VARCHAR} and
@@ -43,8 +47,10 @@
       insert into lh_data_access_doctor_out_diagnosis(
       doctor_diagnosis_number,
       doctor_diagnosis_name,
+      doctor_diagnosis_code,
       patient_id,
       organiz_structure_code,
+      last_edited_time,
       valid_flag,
       create_id,
       create_time,
@@ -53,8 +59,10 @@
       values(
       #{doctorDiagnosisNumber,jdbcType=VARCHAR},
       #{doctorDiagnosisName,jdbcType=VARCHAR},
+      #{doctorDiagnosisCode,jdbcType=VARCHAR},
       #{patientId,jdbcType=VARCHAR},
       #{organizStructureCode,jdbcType=VARCHAR},
+      #{lastEditedTime,jdbcType=TIMESTAMP},
       #{validFlag,jdbcType=VARCHAR},
       #{createId,jdbcType=BIGINT},
       #{createTime,jdbcType=TIMESTAMP},

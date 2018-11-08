@@ -23,6 +23,10 @@ public class DoctorOrderDO {
 
     private String doctorOrderClassific;
 
+    private String doctorOrderTypeCode;
+
+    private Date lastEditedTime;
+
     private String validFlag;
 
     private Long createId;
@@ -32,6 +36,28 @@ public class DoctorOrderDO {
     private Long updateId;
 
     private Date updateTime;
+
+    private int count;
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public String getDoctorOrderTypeCode() {
+        return doctorOrderTypeCode;
+    }
+
+    public void setDoctorOrderTypeCode(String doctorOrderTypeCode) {
+        this.doctorOrderTypeCode = doctorOrderTypeCode;
+    }
+
+    public Date getLastEditedTime() {
+        return lastEditedTime;
+    }
+
+    public void setLastEditedTime(Date lastEditedTime) {
+        this.lastEditedTime = lastEditedTime;
+    }
 
     public Long getId() {
         return id;

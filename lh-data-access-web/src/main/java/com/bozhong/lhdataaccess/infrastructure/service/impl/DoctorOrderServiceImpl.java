@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: 李志坚
@@ -40,8 +37,10 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
         int pageIndex = 0;
         int pageSize = 50;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date currentTime = new Date();
+
         while(true){
+
+            Date currentTime = new Date();
 
             //避免死循环
             if(pageIndex>2000){
@@ -50,16 +49,26 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
             }
             try{
                 //调用中兴接口获取医嘱数据
-                Map<String, String> attributes = new HashMap<String, String>();
-                attributes.put("orgCode", "");
-                attributes.put("personId", "");
-                attributes.put("deptCode", "");
-                attributes.put("wardCode", "");
+                List<Map<String,String>> dataList = new ArrayList<Map<String,String>>();
+                Map<String, String> dataMap = new HashMap<String, String>();
+                dataMap.put("orgCode","");
+                dataMap.put("personId","");
+                dataMap.put("inSno","");
+                dataList.add(dataMap);
+
+                Map<String, Object> attributes = new HashMap<String, Object>();
                 attributes.put("pageIndex",Integer.toString(pageIndex));
                 attributes.put("pageSize", Integer.toString(pageSize));
                 attributes.put("lastEditedTime", sdf.format(lastUpdateTime));
-                Map resultMap = JSONObject.fromObject(HttpUtil.httpPostWithJson("http://118.178.131.147:6002/personDetails/organizationDetail", attributes));
-                JSONArray backBodyJson = JSONArray.fromObject(resultMap.get("outpatientDetail"));
+                Map resultMap = JSONObject.fromObject(HttpUtil.httpPostWithJson("http://118.178.131.147:6003/hospital/personDetails/medication", attributes));
+                Object code = resultMap.get("code");
+                if(code==null || !"200".equals(code.toString())){
+                    logger.error("医嘱数据dump的时候，调用接口出错，code = "+code+",msg = "+(String)resultMap.get("msg"));
+                    pageIndex = pageIndex+1;
+                    continue;
+                }
+
+                JSONArray backBodyJson = JSONArray.fromObject(resultMap.get("medication"));
                 if(backBodyJson==null || backBodyJson.size()<=0){
                     logger.error("医嘱数据dump结束，时间是"+currentTime);
                     break;
@@ -74,16 +83,20 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
                     doctorOrderDO.setOrganizStructureCode(job.get("orgCode").toString());
                     doctorOrderDO.setDoctorOrderName(job.get("orderName").toString());
                     doctorOrderDO.setDoctorOrderLongTemporary(job.get("orderSort").toString());
-                    doctorOrderDO.setDoctorOrderClassific(job.get("orderTypeCode").toString());
+//                    doctorOrderDO.setDoctorOrderClassific();
+                    doctorOrderDO.setDoctorOrderTypeCode(job.get("orderTypeCode").toString());
+                    doctorOrderDO.setLastEditedTime(sdf.parse(job.get("lastEditedTime").toString()));
                     doctorOrderDO.setValidFlag(job.get("cancelFlag").toString());
                     doctorOrderDO.setCreateId(0L);
-                    doctorOrderDO.setCreateTime(sdf.parse(job.get("orderBeginDate").toString()));
+                    doctorOrderDO.setCreateTime(currentTime);
                     doctorOrderDO.setUpdateId(0L);
-                    doctorOrderDO.setUpdateTime(sdf.parse(job.get("lastEditedTime").toString()));
+                    doctorOrderDO.setUpdateTime(currentTime);
                     doctorOrderDAO.updateOrInsertDoctorOrder(doctorOrderDO);
                 }
             }catch(Exception e){
                 logger.error("医嘱数据dump的时候报错"+e);
+                pageIndex = pageIndex+1;
+                continue;
             }
             pageIndex = pageIndex+1;
         }
@@ -92,7 +105,7 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
     @Override
     public List<OrganizStructureDO> selectDataBylastUpdateTime(Date lastUpdateTime) {
         OrganizStructureDO organizStructureDO = new OrganizStructureDO();
-        organizStructureDO.setUpdateTime(lastUpdateTime);
+        organizStructureDO.setLastEditedTime(lastUpdateTime);
 //        return organizStructureDAO.selectDataBylastUpdateTime(organizStructureDO);
         return null;
     }

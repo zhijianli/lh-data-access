@@ -35,6 +35,8 @@ public class DoctorsNursesDO {
 
     private String isOffice;
 
+    private Date lastEditedTime;
+
     private String validFlag;
 
     private Long createId;
@@ -49,6 +51,14 @@ public class DoctorsNursesDO {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public Date getLastEditedTime() {
+        return lastEditedTime;
+    }
+
+    public void setLastEditedTime(Date lastEditedTime) {
+        this.lastEditedTime = lastEditedTime;
     }
 
     public Long getId() {

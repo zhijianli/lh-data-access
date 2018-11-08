@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: 李志坚
@@ -40,8 +37,10 @@ public class DoctorPrescriptionServiceImpl implements DoctorPrescriptionService 
         int pageIndex = 0;
         int pageSize = 50;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date currentTime = new Date();
+
         while(true){
+
+            Date currentTime = new Date();
 
             //避免死循环
             if(pageIndex>2000){
@@ -50,16 +49,27 @@ public class DoctorPrescriptionServiceImpl implements DoctorPrescriptionService 
             }
             try{
                 //调用中兴接口获取处方数据
-                Map<String, String> attributes = new HashMap<String, String>();
-                attributes.put("orgCode", "");
-                attributes.put("personId", "");
-                attributes.put("deptCode", "");
-                attributes.put("wardCode", "");
+                List<Map<String,String>> dataList = new ArrayList<Map<String,String>>();
+                Map<String, String> dataMap = new HashMap<String, String>();
+                dataMap.put("orgCode","");
+                dataMap.put("personId","");
+                dataMap.put("outSno","");
+                dataList.add(dataMap);
+
+                Map<String, Object> attributes = new HashMap<String, Object>();
+                attributes.put("data",dataList);
                 attributes.put("pageIndex",Integer.toString(pageIndex));
                 attributes.put("pageSize", Integer.toString(pageSize));
                 attributes.put("lastEditedTime", sdf.format(lastUpdateTime));
-                Map resultMap = JSONObject.fromObject(HttpUtil.httpPostWithJson("http://118.178.131.147:6002/personDetails/organizationDetail", attributes));
-                JSONArray backBodyJson = JSONArray.fromObject(resultMap.get("outpatientDetail"));
+                Map resultMap = JSONObject.fromObject(HttpUtil.httpPostWithJson("http://118.178.131.147:6003/hospital/personDetails/prescription", attributes));
+                Object code = resultMap.get("code");
+                if(code==null || !"200".equals(code.toString())){
+                    logger.error("处方数据dump的时候，调用接口出错，code = "+code+",msg = "+(String)resultMap.get("msg"));
+                    pageIndex = pageIndex+1;
+                    continue;
+                }
+
+                JSONArray backBodyJson = JSONArray.fromObject(resultMap.get("prescription"));
                 if(backBodyJson==null || backBodyJson.size()<=0){
                     logger.error("处方数据dump结束，时间是"+currentTime);
                     break;
@@ -72,17 +82,20 @@ public class DoctorPrescriptionServiceImpl implements DoctorPrescriptionService 
                     doctorPrescriptionDO.setDoctorPrescriptionNumber(job.get("outRpDetSno").toString());
                     doctorPrescriptionDO.setPatientId(job.get("patientId").toString());
                     doctorPrescriptionDO.setOrganizStructureCode(job.get("orgCode").toString());
-                    doctorPrescriptionDO.setDoctorPrescriptionName(job.get("orderName").toString());
-                    doctorPrescriptionDO.setDoctorPrescriptionClassific(job.get("drugName").toString());
+                    doctorPrescriptionDO.setDrugName(job.get("drugName").toString());
+                    doctorPrescriptionDO.setDoctorPrescriptionClassific(job.get("rpSort").toString());
+                    doctorPrescriptionDO.setLastEditedTime(sdf.parse(job.get("lastEditedTime").toString()));
                     doctorPrescriptionDO.setValidFlag(job.get("cancelFlag").toString());
                     doctorPrescriptionDO.setCreateId(0L);
-                    doctorPrescriptionDO.setCreateTime(sdf.parse(job.get("invoiceTime").toString()));
+                    doctorPrescriptionDO.setCreateTime(currentTime);
                     doctorPrescriptionDO.setUpdateId(0L);
-                    doctorPrescriptionDO.setUpdateTime(sdf.parse(job.get("lastEditedTime").toString()));
+                    doctorPrescriptionDO.setUpdateTime(currentTime);
                     doctorPrescriptionDAO.updateOrInsertDoctorPrescription(doctorPrescriptionDO);
                 }
             }catch(Exception e){
                 logger.error("处方数据dump的时候报错"+e);
+                pageIndex = pageIndex+1;
+                continue;
             }
             pageIndex = pageIndex+1;
         }
@@ -91,7 +104,7 @@ public class DoctorPrescriptionServiceImpl implements DoctorPrescriptionService 
     @Override
     public List<OrganizStructureDO> selectDataBylastUpdateTime(Date lastUpdateTime) {
         OrganizStructureDO organizStructureDO = new OrganizStructureDO();
-        organizStructureDO.setUpdateTime(lastUpdateTime);
+        organizStructureDO.setLastEditedTime(lastUpdateTime);
 //        return organizStructureDAO.selectDataBylastUpdateTime(organizStructureDO);
         return null;
     }

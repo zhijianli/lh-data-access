@@ -25,6 +25,8 @@ public class OrganizStructureDO {
 
     private Long createId;
 
+    private Date lastEditedTime;
+
     private Date createTime;
 
     private Long updateId;
@@ -35,6 +37,14 @@ public class OrganizStructureDO {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public Date getLastEditedTime() {
+        return lastEditedTime;
+    }
+
+    public void setLastEditedTime(Date lastEditedTime) {
+        this.lastEditedTime = lastEditedTime;
     }
 
     public Long getId() {
