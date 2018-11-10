@@ -23,8 +23,8 @@ public class DoctorOutDiagnosisDAOImpl extends BaseDao implements DoctorOutDiagn
     }
 
     @Override
-    public List<OrganizStructureDO> selectDataBylastUpdateTime(OrganizStructureDO organizStructureDO) {
-        return findForList("selectDataBylastUpdateTime",organizStructureDO);
+    public List<DoctorOutDiagnosisDO> selectDodDataByDoctorOutDiagnosisDO(DoctorOutDiagnosisDO doctorOutDiagnosisDO) {
+        return findForList("selectDodDataByDoctorOutDiagnosisDO",doctorOutDiagnosisDO);
     }
 
 }

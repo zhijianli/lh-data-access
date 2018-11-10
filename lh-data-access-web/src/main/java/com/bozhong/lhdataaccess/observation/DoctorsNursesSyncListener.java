@@ -7,6 +7,10 @@ import com.bozhong.lhdataaccess.infrastructure.dao.HospitalDAO;
 import com.bozhong.lhdataaccess.infrastructure.dao.HospitalWardDAO;
 import com.bozhong.lhdataaccess.infrastructure.service.DoctorsNursesService;
 import com.bozhong.lhdataaccess.infrastructure.service.OrganizStructureService;
+import com.bozhong.user.domain.core.Result;
+import com.bozhong.user.domain.dto.request.SyncUserInfoReqDTO;
+import com.bozhong.user.domain.dto.request.SyncUserListReqDTO;
+import com.bozhong.user.service.UserWriteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +35,10 @@ public class DoctorsNursesSyncListener implements ApplicationListener<DumpDataEv
     private OrganizStructureService organizStructureService;
 
     @Autowired
-    private DoctorsNursesService doctorosNudrsesService;
+    private DoctorsNursesService doctorosNursesService;
+
+    @Autowired
+    private UserWriteService userWriteService;
 
     @Autowired
     private HospitalDAO hospitalDAO;
@@ -52,48 +59,70 @@ public class DoctorsNursesSyncListener implements ApplicationListener<DumpDataEv
 //            this.organizStructureSync(lastUpdateTime);
 //
 //            //第二步：同步中兴医护的数据
-            this.doctorsNursesSync(lastUpdateTime);
+//            this.doctorsNursesSync(lastUpdateTime);
     }
 
     private void doctorsNursesSync(Date lastUpdateTime) {
-        List<DoctorsNursesDO> dnList = doctorosNudrsesService.selectDataBylastUpdateTime(lastUpdateTime);
+        List<DoctorsNursesDO> dnList = doctorosNursesService.selectNursesDataBylastUpdateTime(lastUpdateTime);
         if(dnList!=null && dnList.size()>0){
+
+            List<SyncUserInfoReqDTO> suiList= new ArrayList<SyncUserInfoReqDTO>();
             for (int i = 0; i < dnList.size(); i++) {
+                try{
 
                 DoctorsNursesDO dn = dnList.get(i);
                 String currentProfessionalCode = dn.getCurrentProfessionalCode();
-                if("21".equals(currentProfessionalCode)){
 
-                      //获取医院id
-                      String osCode = dn.getOrganizStructureCode();
-                      HospitalDO hospitalDO = new HospitalDO();
-                      hospitalDO.setCode(osCode);
-                      Long hosId = hospitalDAO.selectHospitalId(hospitalDO);
+                //获取医院id
+                String osCode = dn.getOrganizStructureCode();
+                HospitalDO hospitalDO = new HospitalDO();
+                hospitalDO.setCode(osCode);
+                Long hosId = hospitalDAO.selectHospitalId(hospitalDO);
 
-                      //获取病区id，科室id
-                      String wardCode = dn.getDepartWardCode();
-                      HospitalWardDO hospitalWardDO = new HospitalWardDO();
-                      hospitalWardDO.setHospitalId(hosId);
-                      hospitalWardDO.setCode(wardCode);
-                      HospitalWardDO hwDO = hospitalWardDAO.selectHospitalWardDO(hospitalWardDO);
-                      Long wardId = hwDO.getId();
-                      Long deptId = hwDO.getDeptId();
+                //获取病区id，科室id
+                String wardCode = dn.getDepartWardCode();
+                HospitalWardDO hospitalWardDO = new HospitalWardDO();
+                hospitalWardDO.setHospitalId(hosId);
+                hospitalWardDO.setCode(wardCode);
+                HospitalWardDO hwDO = hospitalWardDAO.selectHospitalWardDO(hospitalWardDO);
+                Long wardId = hwDO.getId();
+                Long deptId = hwDO.getDeptId();
 
-                      //获取员工号，用户名字
-                      String name = dn.getName();
-                      String empCode = dn.getEmpCode();
+                //获取员工号，用户名字
+                String name = dn.getName();
+                String empCode = dn.getEmpCode();
 
-//                        AccountDO accountDO = new AccountDO();
-//                        accountDO.setLogin();
-//                        accountDO.setPassword();
-//                        accountDO.setName(dn.getName());
-//                        accountDO.setHospitalIds();
-//                        accountDO.setWardId();
-//                        accountDO.setValidFlag(dn.getValidFlag());
-//                        accountDO.setCreateId(dn.getCreateId());
-//                        accountDO.setCreateTime(dn.getCreateTime());
-//                        accountDO.setUpdateId(dn.getUpdateId());
-//                        accountDO.setUpdateTime(dn.getUpdateTime());
+                //调用用户中心同步数据
+                SyncUserInfoReqDTO suiDTO = new SyncUserInfoReqDTO();
+                suiDTO.setHospitalId(hosId);
+                suiDTO.setJobNumber(empCode);
+                suiDTO.setName(name);
+                suiDTO.setDeptId(deptId);
+                if(wardId!=null){
+                    suiDTO.setWardId(wardId.toString());
+                }
+                suiList.add(suiDTO);
+
+             }catch(Exception e){
+                 logger.error("同步医护数据到用户中心出错。"+e);
+                 continue;
+             }
+            }
+
+            SyncUserListReqDTO sylDTO = new SyncUserListReqDTO();
+            List<SyncUserInfoReqDTO> tempList= new ArrayList<SyncUserInfoReqDTO>();
+            if(suiList!=null && suiList.size()>0){
+                for(int i =0;i<suiList.size();i++){
+                    tempList.add(suiList.get(i));
+                    if(tempList.size()>=50 || i==suiList.size()-1){
+                        sylDTO.setSyncUserInfoReqDTOList(tempList);
+                        Result<Void> result = userWriteService.syncUserInfo(sylDTO);
+                        if(result==null || !result.isSuccess()){
+                            logger.error("调用用户中心插入用户失败，msg = "+ result);
+                            continue;
+                        }
+                        tempList.clear();
+                    }
                 }
             }
         }

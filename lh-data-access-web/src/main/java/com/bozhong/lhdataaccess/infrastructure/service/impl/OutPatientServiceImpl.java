@@ -8,6 +8,8 @@ import com.bozhong.lhdataaccess.infrastructure.dao.InPatientDAO;
 import com.bozhong.lhdataaccess.infrastructure.dao.OutPatientDAO;
 import com.bozhong.lhdataaccess.infrastructure.service.InPatientService;
 import com.bozhong.lhdataaccess.infrastructure.service.OutPatientService;
+import com.zhicall.core.mybatis.page.Page;
+import com.zhicall.core.mybatis.page.PageRequest;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -110,11 +112,15 @@ public class OutPatientServiceImpl implements OutPatientService {
     }
 
     @Override
-    public List<OrganizStructureDO> selectDataBylastUpdateTime(Date lastUpdateTime) {
-        OrganizStructureDO organizStructureDO = new OrganizStructureDO();
-        organizStructureDO.setLastEditedTime(lastUpdateTime);
-//        return organizStructureDAO.selectDataBylastUpdateTime(organizStructureDO);
-        return null;
+    public List<OutPatientDO> selectDataBylastUpdateTime(Date lastUpdateTime) {
+        OutPatientDO outPatientDO = new OutPatientDO();
+        outPatientDO.setLastEditedTime(lastUpdateTime);
+        return outPatientDAO.selectDataBylastUpdateTime(outPatientDO);
+    }
+
+    @Override
+    public Page<OutPatientDO> selectDataByPage(PageRequest pageRequest) {
+        return outPatientDAO.selectDataByPage(pageRequest);
     }
 
 }

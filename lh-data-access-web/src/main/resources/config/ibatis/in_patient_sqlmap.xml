@@ -17,7 +17,7 @@
     <result column="ward_name" jdbcType="VARCHAR" property="wardName" />
     <result column="visit_time" jdbcType="TIMESTAMP" property="visitTime" />
     <result column="visit_record" jdbcType="VARCHAR" property="visitRecord" />
-    <result column="visit_card_number" jdbcType="VARCHAR" property="visitCardNumber" />
+    <result column="out_patient_number" jdbcType="VARCHAR" property="outPatientNumber" />
     <result column="diagnostic_update_time" jdbcType="TIMESTAMP" property="diagnosticUpdateTime" />
     <result column="admission_time" jdbcType="TIMESTAMP" property="admissionTime" />
     <result column="admission_state" jdbcType="VARCHAR" property="admissionState" />
@@ -34,10 +34,32 @@
   <sql id="Base_Column_List">
     id, patient_id, patient_name, bed_number, telephone, id_number, date_of_birth,
     attending_doctor_name, organiz_structure_code, depart_code, depart_name, ward_code, 
-    ward_name, visit_time, visit_record, visit_card_number, diagnostic_update_time, admission_time, 
+    ward_name, visit_time, visit_record, out_patient_number, diagnostic_update_time, admission_time,
     admission_state, hospital_record, outcome, last_edited_time, valid_flag, create_id, create_time, update_id,
     update_time
   </sql>
+
+
+  <select id="selectIpDataByPage" parameterType="Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from lh_data_access_in_patient
+    where
+    valid_flag = 0
+    <![CDATA[
+        and  last_edited_time >= #{lastEditedTime,jdbcType=TIMESTAMP}
+        ]]>
+  </select>
+
+  <select id="selectIpDataBylastUpdateTime" parameterType="com.bozhong.lhdataaccess.domain.InPatientDO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from lh_data_access_in_patient
+    where
+    <![CDATA[
+            last_edited_time >= #{lastEditedTime,jdbcType=TIMESTAMP}
+        ]]>
+  </select>
 
   <insert id="updateOrInsertInPatient" useGeneratedKeys="true" keyProperty="id" parameterType="com.bozhong.lhdataaccess.domain.InPatientDO" >
 
@@ -131,28 +153,5 @@
     </if>
 
   </insert>
-
-  <!--<insert id="insert" parameterType="com.itheima.mybatis.po.LhDataAccessInPatient">-->
-    <!--insert into lh_data_access_in_patient (id, patient_id, patient_name, -->
-      <!--patient_number, bed_number, telephone, -->
-      <!--id_number, date_of_birth, attending_doctor_name, -->
-      <!--organiz_structure_code, depart_code, depart_name, -->
-      <!--ward_code, ward_name, visit_time, -->
-      <!--visit_record, visit_card_number, diagnostic_update_time, -->
-      <!--admission_time, admission_state, hospital_record, -->
-      <!--outcome, valid_flag, create_id, -->
-      <!--create_time, update_id, update_time-->
-      <!--)-->
-    <!--values (#{id,jdbcType=BIGINT}, #{patientId,jdbcType=VARCHAR}, #{patientName,jdbcType=VARCHAR}, -->
-      <!--#{patientNumber,jdbcType=VARCHAR}, #{bedNumber,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, -->
-      <!--#{idNumber,jdbcType=VARCHAR}, #{dateOfBirth,jdbcType=TIMESTAMP}, #{attendingDoctorName,jdbcType=VARCHAR}, -->
-      <!--#{organizStructureCode,jdbcType=VARCHAR}, #{departCode,jdbcType=VARCHAR}, #{departName,jdbcType=VARCHAR}, -->
-      <!--#{wardCode,jdbcType=VARCHAR}, #{wardName,jdbcType=VARCHAR}, #{visitTime,jdbcType=TIMESTAMP}, -->
-      <!--#{visitRecord,jdbcType=VARCHAR}, #{visitCardNumber,jdbcType=VARCHAR}, #{diagnosticUpdateTime,jdbcType=TIMESTAMP}, -->
-      <!--#{admissionTime,jdbcType=TIMESTAMP}, #{admissionState,jdbcType=VARCHAR}, #{hospitalRecord,jdbcType=VARCHAR}, -->
-      <!--#{outcome,jdbcType=VARCHAR}, #{validFlag,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, -->
-      <!--#{createTime,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}-->
-      <!--)-->
-  <!--</insert>-->
 
 </mapper>

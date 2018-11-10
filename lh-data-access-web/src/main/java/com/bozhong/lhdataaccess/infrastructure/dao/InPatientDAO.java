@@ -2,6 +2,9 @@ package com.bozhong.lhdataaccess.infrastructure.dao;
 
 import com.bozhong.lhdataaccess.domain.InPatientDO;
 import com.bozhong.lhdataaccess.domain.OrganizStructureDO;
+import com.bozhong.lhdataaccess.domain.OutPatientDO;
+import com.zhicall.core.mybatis.page.Page;
+import com.zhicall.core.mybatis.page.PageRequest;
 
 import java.util.List;
 
@@ -14,5 +17,7 @@ public interface InPatientDAO {
 
     void updateOrInsertInPatient(InPatientDO inPatientDO);
 
-    List<OrganizStructureDO> selectDataBylastUpdateTime(OrganizStructureDO organizStructureDO);
+    List<InPatientDO> selectDataBylastUpdateTime(InPatientDO inPatientDO);
+
+    Page<InPatientDO> selectDataByPage(PageRequest pageRequest);
 }

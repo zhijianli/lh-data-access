@@ -22,9 +22,10 @@ public class DoctorInDiagnosisDAOImpl extends BaseDao implements DoctorInDiagnos
         insert("updateOrInsertDoctorInDiagnosis",doctorInDiagnosisDO);
     }
 
+
     @Override
-    public List<OrganizStructureDO> selectDataBylastUpdateTime(OrganizStructureDO organizStructureDO) {
-        return findForList("selectDataBylastUpdateTime",organizStructureDO);
+    public List<DoctorInDiagnosisDO> selectDidDataByDoctorInDiagnosisDO(DoctorInDiagnosisDO doctorInDiagnosisDO) {
+        return findForList("selectDidDataByDoctorInDiagnosisDO",doctorInDiagnosisDO);
     }
 
 }

@@ -22,8 +22,8 @@ public class DoctorsNursesDAOImpl extends BaseDao implements DoctorsNursesDAO {
     }
 
     @Override
-    public List<DoctorsNursesDO> selectDataBylastUpdateTime(DoctorsNursesDO doctorsNursesDO) {
-        return findForList("selectDataBylastUpdateTime",doctorsNursesDO);
+    public List<DoctorsNursesDO> selectNursesDataBylastUpdateTime(DoctorsNursesDO doctorsNursesDO) {
+        return findForList("selectNursesDataBylastUpdateTime",doctorsNursesDO);
     }
 
 }

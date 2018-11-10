@@ -4,9 +4,12 @@ import com.bozhong.lhdataaccess.client.common.constants.util.StringUtil;
 import com.bozhong.lhdataaccess.common.util.HttpUtil;
 import com.bozhong.lhdataaccess.domain.InPatientDO;
 import com.bozhong.lhdataaccess.domain.OrganizStructureDO;
+import com.bozhong.lhdataaccess.domain.OutPatientDO;
 import com.bozhong.lhdataaccess.infrastructure.dao.InPatientDAO;
 import com.bozhong.lhdataaccess.infrastructure.dao.OrganizStructureDAO;
 import com.bozhong.lhdataaccess.infrastructure.service.InPatientService;
+import com.zhicall.core.mybatis.page.Page;
+import com.zhicall.core.mybatis.page.PageRequest;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -120,11 +123,15 @@ public class InPatientServiceImpl implements InPatientService {
     }
 
     @Override
-    public List<OrganizStructureDO> selectDataBylastUpdateTime(Date lastUpdateTime) {
-        OrganizStructureDO organizStructureDO = new OrganizStructureDO();
-        organizStructureDO.setLastEditedTime(lastUpdateTime);
-//        return organizStructureDAO.selectDataBylastUpdateTime(organizStructureDO);
-        return null;
+    public List<InPatientDO> selectDataBylastUpdateTime(Date lastUpdateTime) {
+        InPatientDO inPatientDO = new InPatientDO();
+        inPatientDO.setLastEditedTime(lastUpdateTime);
+        return inPatientDAO.selectDataBylastUpdateTime(inPatientDO);
+    }
+
+    @Override
+    public Page<InPatientDO> selectDataByPage(PageRequest pageRequest) {
+        return inPatientDAO.selectDataByPage(pageRequest);
     }
 
 }

@@ -118,10 +118,11 @@ public class DoctorsNursesServiceImpl implements DoctorsNursesService {
     }
 
     @Override
-    public List<DoctorsNursesDO> selectDataBylastUpdateTime(Date lastUpdateTime) {
+    public List<DoctorsNursesDO> selectNursesDataBylastUpdateTime(Date lastUpdateTime) {
         DoctorsNursesDO doctorsNursesDO = new DoctorsNursesDO();
         doctorsNursesDO.setLastEditedTime(lastUpdateTime);
-        return doctorsNursesDAO.selectDataBylastUpdateTime(doctorsNursesDO);
+        doctorsNursesDO.setCurrentProfessionalCode("21");
+        return doctorsNursesDAO.selectNursesDataBylastUpdateTime(doctorsNursesDO);
     }
 
 }

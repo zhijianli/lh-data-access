@@ -285,10 +285,6 @@
         </dependency>
         <dependency>
             <groupId>com.bozhong</groupId>
-            <artifactId>userCentral-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.bozhong</groupId>
             <artifactId>nurse-train-client</artifactId>
         </dependency>
         <dependency>
@@ -309,7 +305,7 @@
         <dependency>
             <groupId>com.bozhong</groupId>
             <artifactId>userCentral-client-longhua</artifactId>
-            <version>1.0.5</version>
+            <version>1.0.6</version>
         </dependency>
     </dependencies>
 

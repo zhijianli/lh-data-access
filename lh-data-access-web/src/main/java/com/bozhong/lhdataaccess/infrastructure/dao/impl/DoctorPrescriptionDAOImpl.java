@@ -23,8 +23,8 @@ public class DoctorPrescriptionDAOImpl extends BaseDao implements DoctorPrescrip
     }
 
     @Override
-    public List<OrganizStructureDO> selectDataBylastUpdateTime(OrganizStructureDO organizStructureDO) {
-        return findForList("selectDataBylastUpdateTime",organizStructureDO);
+    public List<DoctorPrescriptionDO> selectDpDataByDoctorPrescriptionDO(DoctorPrescriptionDO doctorPrescriptionDO) {
+        return findForList("selectDpDataByDoctorPrescriptionDO",doctorPrescriptionDO);
     }
 
 }

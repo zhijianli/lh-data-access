@@ -14,5 +14,5 @@ public interface DoctorsNursesDAO {
 
     void updateOrInsertDoctorsNurses(DoctorsNursesDO doctorsNursesDO);
 
-    List<DoctorsNursesDO> selectDataBylastUpdateTime(DoctorsNursesDO doctorsNursesDO);
+    List<DoctorsNursesDO> selectNursesDataBylastUpdateTime(DoctorsNursesDO doctorsNursesDO);
 }

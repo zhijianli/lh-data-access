@@ -16,6 +16,6 @@ public interface DoctorsNursesService {
 
     void dumpDoctorsNursesData(Date lastUpdateTime);
 
-    List<DoctorsNursesDO> selectDataBylastUpdateTime(Date lastUpdateTime);
+    List<DoctorsNursesDO> selectNursesDataBylastUpdateTime(Date lastUpdateTime);
 
 }

@@ -36,5 +36,8 @@
                      version="${hsf_privilege_consumer_version}" group="privilege" timeout="15000">
     </dubbo:reference>
 
+    <dubbo:reference id="userWriteService" interface="com.bozhong.user.service.UserWriteService"
+                     version="${hsf_privilege_consumer_version}" group="longhua" timeout="15000">
+    </dubbo:reference>
 
 </beans>

@@ -28,7 +28,7 @@
         <!--where id = #{id,jdbcType=BIGINT}-->
     <!--</select>-->
 
-    <select id="selectDataBylastUpdateTime" parameterType="com.bozhong.lhdataaccess.domain.OrganizStructureDO" resultMap="BaseResultMap">
+    <select id="selectOsDataBylastUpdateTime" parameterType="com.bozhong.lhdataaccess.domain.OrganizStructureDO" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from lh_data_access_organiz_structure

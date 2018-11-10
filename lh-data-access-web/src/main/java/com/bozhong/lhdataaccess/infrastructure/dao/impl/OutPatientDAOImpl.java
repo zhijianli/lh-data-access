@@ -5,6 +5,8 @@ import com.bozhong.lhdataaccess.domain.OrganizStructureDO;
 import com.bozhong.lhdataaccess.domain.OutPatientDO;
 import com.bozhong.lhdataaccess.infrastructure.dao.InPatientDAO;
 import com.bozhong.lhdataaccess.infrastructure.dao.OutPatientDAO;
+import com.zhicall.core.mybatis.page.Page;
+import com.zhicall.core.mybatis.page.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,8 +25,14 @@ public class OutPatientDAOImpl extends BaseDao implements OutPatientDAO {
     }
 
     @Override
-    public List<OrganizStructureDO> selectDataBylastUpdateTime(OrganizStructureDO organizStructureDO) {
-        return findForList("selectDataBylastUpdateTime",organizStructureDO);
+    public List<OutPatientDO> selectDataBylastUpdateTime(OutPatientDO outPatientDO) {
+        return findForList("selectOpDataBylastUpdateTime",outPatientDO);
     }
+
+    @Override
+    public Page<OutPatientDO> selectDataByPage(PageRequest pageRequest) {
+        return findForPage("selectOpDataByPage",pageRequest);
+    }
+
 
 }

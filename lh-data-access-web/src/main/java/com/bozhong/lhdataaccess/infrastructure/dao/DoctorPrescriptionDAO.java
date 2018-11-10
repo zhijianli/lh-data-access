@@ -15,5 +15,5 @@ public interface DoctorPrescriptionDAO {
 
     void updateOrInsertDoctorPrescription(DoctorPrescriptionDO doctorPrescriptionDO);
 
-    List<OrganizStructureDO> selectDataBylastUpdateTime(OrganizStructureDO organizStructureDO);
+    List<DoctorPrescriptionDO> selectDpDataByDoctorPrescriptionDO(DoctorPrescriptionDO doctorPrescriptionDO);
 }

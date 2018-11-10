@@ -2,6 +2,9 @@ package com.bozhong.lhdataaccess.infrastructure.service;
 
 
 import com.bozhong.lhdataaccess.domain.OrganizStructureDO;
+import com.bozhong.lhdataaccess.domain.OutPatientDO;
+import com.zhicall.core.mybatis.page.Page;
+import com.zhicall.core.mybatis.page.PageRequest;
 
 import java.util.Date;
 import java.util.List;
@@ -15,6 +18,8 @@ public interface OutPatientService {
 
     void dumpOutPatient(Date lastUpdateTime);
 
-    List<OrganizStructureDO> selectDataBylastUpdateTime(Date lastUpdateTime);
+    List<OutPatientDO> selectDataBylastUpdateTime(Date lastUpdateTime);
+
+    Page<OutPatientDO> selectDataByPage(PageRequest pageRequest);
 
 }
