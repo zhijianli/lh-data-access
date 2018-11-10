@@ -34,8 +34,9 @@ public class LhDataAccessTest extends BaseTest {
     @Test
     public void dumpData(){
         try {
-             Date lastUpdateTime=new SimpleDateFormat("yyyy-MM-dd").parse("2018-10-08");
-             dumpDataPubisher.publishEvent(new DumpDataEvent(lastUpdateTime));
+             Date lastUpdateTime=new SimpleDateFormat("yyyy-MM-dd").parse("2018-10-03");
+             dumpDataPubisher.setLastEditedTime(lastUpdateTime);
+             dumpDataPubisher.publishEvent(new DumpDataEvent(dumpDataPubisher));
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

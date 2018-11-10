@@ -18,6 +18,16 @@ import java.util.Date;
 @Component("dumpDataPubisher")
 public class DumpDataPubisher implements ApplicationContextAware {
 
+    private Date lastEditedTime;
+
+    public Date getLastEditedTime() {
+        return lastEditedTime;
+    }
+
+    public void setLastEditedTime(Date lastEditedTime) {
+        this.lastEditedTime = lastEditedTime;
+    }
+
     @Autowired
     private OrganizStructureService organizStructureService;
 
@@ -51,7 +61,7 @@ public class DumpDataPubisher implements ApplicationContextAware {
 
         Boolean operationSuccess = false;
 
-        Date lastUpdateTime = event.getLastUpdateTime();
+        Date lastUpdateTime = this.lastEditedTime;
 
         //dump组织机构的数据
 //        organizStructureService.dumpOrganizStructureData(lastUpdateTime);

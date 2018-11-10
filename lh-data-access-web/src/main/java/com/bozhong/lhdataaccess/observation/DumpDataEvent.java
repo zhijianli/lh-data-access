@@ -10,13 +10,7 @@ import java.util.Date;
  */
 public class DumpDataEvent extends ApplicationEvent {
 
-    public Date lastUpdateTime;
-
     public DumpDataEvent(Object source) {
         super(source);
-        lastUpdateTime = (Date)source;
-    }
-    public Date getLastUpdateTime(){
-          return this.lastUpdateTime;
     }
 }

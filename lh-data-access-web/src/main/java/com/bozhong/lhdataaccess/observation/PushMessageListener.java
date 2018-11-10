@@ -12,7 +12,9 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.SmartApplicationListener;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -23,7 +25,7 @@ import java.util.*;
  * 把根据患者相关信息推送消息，也是观察者之一
  */
 @Component
-public class PushMessageListener implements ApplicationListener<DumpDataEvent> {
+public class PushMessageListener implements SmartApplicationListener {
 
     private static final Logger logger = LoggerFactory.getLogger("dlDataAccessLog");
 
@@ -46,16 +48,18 @@ public class PushMessageListener implements ApplicationListener<DumpDataEvent> {
     private DoctorInDiagnosisDAO doctorInDiagnosisDAO;
 
     @Override
-    public void onApplicationEvent(DumpDataEvent event)  {
+    public void onApplicationEvent(ApplicationEvent event)  {
 
-        System.out.println("+++++++推送消息开始！++++++");
+        DumpDataPubisher dumpDataPubisher = (DumpDataPubisher)((DumpDataEvent)event).getSource();
 
-        Date lastUpdateTime = event.getLastUpdateTime();
+        Date lastEditedTime =  dumpDataPubisher.getLastEditedTime();
 
-//        List<RuleMessageDO> opRuleMessageList = this.configOutPatientRule(lastUpdateTime);
+        System.out.println("==============第三步：推送消息开始！==============，lastEditedTime = "+lastEditedTime);
+
+//        List<RuleMessageDO> opRuleMessageList = this.configOutPatientRule(lastEditedTime);
 
         //获取住院患者规则对象
-        List<RuleMessageDO> ipRuleMessageList = this.configInPatientRule(lastUpdateTime);
+//        List<RuleMessageDO> ipRuleMessageList = this.configInPatientRule(lastEditedTime);
 
 
         //获取特殊人群规则对象
@@ -63,6 +67,8 @@ public class PushMessageListener implements ApplicationListener<DumpDataEvent> {
 
         //根据规则推送消息
 
+
+        System.out.println("==============第三步：推送消息结束！==============，lastEditedTime = "+lastEditedTime);
     }
 
     private List<RuleMessageDO> configInPatientRule(Date lastUpdateTime) {
@@ -236,19 +242,19 @@ public class PushMessageListener implements ApplicationListener<DumpDataEvent> {
         return ruleMessageDOList;
     }
 
-//    @Override
-//    public int getOrder() {
-//        return 1;
-//    }
-//
-//    @Override
-//    public boolean supportsEventType(Class<? extends ApplicationEvent> eventType) {
-//        return eventType == DumpDataEvent.class;
-//    }
-//
-//    @Override
-//    public boolean supportsSourceType(Class<?> sourceType) {
-//        return sourceType == DumpDataPubisher.class;
-//    }
+    @Override
+    public int getOrder() {
+        return 3;
+    }
+
+    @Override
+    public boolean supportsEventType(Class<? extends ApplicationEvent> eventType) {
+        return eventType == DumpDataEvent.class;
+    }
+
+    @Override
+    public boolean supportsSourceType(Class<?> sourceType) {
+        return sourceType == DumpDataPubisher.class;
+    }
 
 }

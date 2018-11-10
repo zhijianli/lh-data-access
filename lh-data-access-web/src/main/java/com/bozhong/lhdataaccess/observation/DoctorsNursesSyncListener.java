@@ -27,7 +27,7 @@ import java.util.*;
  * 把中兴的数据同步到医护相关的表，也是观察者之一
  */
 @Component
-public class DoctorsNursesSyncListener implements ApplicationListener<DumpDataEvent> {
+public class DoctorsNursesSyncListener implements SmartApplicationListener{
 
     private static final Logger logger = LoggerFactory.getLogger("dlDataAccessLog");
 
@@ -50,16 +50,20 @@ public class DoctorsNursesSyncListener implements ApplicationListener<DumpDataEv
     private HospitalWardDAO hospitalWardDAO;
 
     @Override
-    public void onApplicationEvent(DumpDataEvent event)  {
-            Date lastUpdateTime = event.getLastUpdateTime();
+    public void onApplicationEvent(ApplicationEvent event)  {
+            DumpDataPubisher dumpDataPubisher = (DumpDataPubisher)((DumpDataEvent)event).getSource();
 
-            System.out.println("++++++++同步医护数据开始！+++++++++");
+            Date lastEditedTime =  dumpDataPubisher.getLastEditedTime();
+
+            System.out.println("==============第一步：同步医护数据开始！==============，lastEditedTime = "+lastEditedTime);
 
 //            //第一步：同步中兴组织架构的数据（必须先同步组织架构数据，再同步医护数据，因为医护数据需要依赖组织架构数据）
-//            this.organizStructureSync(lastUpdateTime);
+//            this.organizStructureSync(lastEditedTime);
 //
 //            //第二步：同步中兴医护的数据
-//            this.doctorsNursesSync(lastUpdateTime);
+//            this.doctorsNursesSync(lastEditedTime);
+
+            System.out.println("==============第一步：同步医护数据结束！==============，lastEditedTime = "+lastEditedTime);
     }
 
     private void doctorsNursesSync(Date lastUpdateTime) {
@@ -191,11 +195,21 @@ public class DoctorsNursesSyncListener implements ApplicationListener<DumpDataEv
         }
     }
 
-    //    @Override
-//    public int getOrder() {
-//        return 1;
-//    }
-//
+    @Override
+    public int getOrder() {
+        return 1;
+    }
+
+    @Override
+    public boolean supportsEventType(Class<? extends ApplicationEvent> eventType) {
+        return eventType == DumpDataEvent.class;
+    }
+
+    @Override
+    public boolean supportsSourceType(Class<?> sourceType) {
+        return sourceType == DumpDataPubisher.class;
+    }
+
 //    @Override
 //    public boolean supportsEventType(Class<? extends ApplicationEvent> eventType) {
 //        return eventType == DumpDataEvent.class;
