@@ -64,7 +64,7 @@ public class DumpDataPubisher implements ApplicationContextAware {
         Date lastUpdateTime = this.lastEditedTime;
 
         //dump组织机构的数据
-//        organizStructureService.dumpOrganizStructureData(lastUpdateTime);
+        organizStructureService.dumpOrganizStructureData(lastUpdateTime);
 
         //dump医护的数据
 //        doctorsNursesService.dumpDoctorsNursesData(lastUpdateTime);

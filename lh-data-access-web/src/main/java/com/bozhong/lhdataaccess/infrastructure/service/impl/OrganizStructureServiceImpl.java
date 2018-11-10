@@ -56,7 +56,7 @@ public class OrganizStructureServiceImpl implements OrganizStructureService {
             try{
                 //调用中兴接口获取组织机构代码数据
                 Map<String, Object> attributes = new HashMap<String, Object>();
-                attributes.put("orgCode", "455769713");
+                attributes.put("orgCode", "");
                 attributes.put("pageIndex",Integer.toString(pageIndex));
                 attributes.put("pageSize", Integer.toString(pageSize));
                 attributes.put("lastEditedTime", sdf.format(lastUpdateTime));
